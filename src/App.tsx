@@ -8,9 +8,21 @@ import { ThemeProvider } from "@emotion/react";
 import { lightTheme, darkTheme } from "./theme"; // Import both themes
 import NavBar from "./pages/ui/NavBar";
 import LandingPage from "./pages/landing/LandingPage";
+import Login from "./pages/Login/Login";
+import HomePage from "./pages/home/HomePage";
+
+import { useAuthValidation } from "./hooks/useAuthValidation";
+import AdminPage from "./pages/admin/AdminPage";
+import AdminVerificationPage from "./pages/admin/AdminVerificationPage";
+import AdminLayout from "./pages/admin/AdminLayout";
+import Companies from "./pages/admin/Companies";
+import Providers from "./pages/admin/Providers";
+import ProtectedRoute from "./pages/Login/ProtectedRoute";
+import { useUserStore } from "./stores/UserStore";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const auth = useUserStore();
+  useAuthValidation();
 
   // State to track dark mode
   const [isDarkMode, setIsDarkMode] = useState(
@@ -37,24 +49,23 @@ function App() {
           <NavBar />
           <Routes>
             {/* Protected routes */}
-            {/* <Route
-              element={
-                <ProtectedRoute isAuthenticated={auth.isAuthenticated} />
-              }
-            >
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/transactions" element={<TransactionList />} />
-              <Route path="/analysis" element={<Analysis />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/support" element={<SupportPage />} />
-            </Route> */}
+            <Route element={<ProtectedRoute user={auth.user} />}>
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminPage />} />
+                <Route path="companies" element={<Companies />} />
+                <Route path="providers" element={<Providers />} />
+                {/* Puedes añadir más rutas anidadas aquí */}
+              </Route>
+            </Route>
 
             {/* Public routes */}
+            <Route
+              path="/admin-verification"
+              element={<AdminVerificationPage />}
+            />
             <Route path="/" element={<LandingPage />} />
-
-            {/* <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} /> */}
+            <Route path="/login" element={<Login />} />
 
             {/* Not found route */}
             <Route path="*" element={<h1>Not Found</h1>} />

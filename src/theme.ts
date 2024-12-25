@@ -38,8 +38,8 @@ const lightTheme = createTheme({
         MuiButton: {
             styleOverrides: {
                 root: {
-                    borderRadius: '50px',
-                    textTransform: 'none',
+
+
                     padding: '10px 20px',
                 },
             },
@@ -52,6 +52,13 @@ const lightTheme = createTheme({
                 },
             },
         },
+        MuiInput: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '50px',
+                },
+            },
+        }
     },
 });
 
