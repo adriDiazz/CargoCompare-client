@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { useEffect } from "react";
 
 const columns = [
   { field: "id", headerName: "ID", width: 70 },
@@ -30,31 +31,33 @@ const columns = [
   { field: "country", headerName: "Country", width: 100 },
 ];
 
-// Dummy data for example
-const rows = [
-  {
-    id: 1,
-    name: "Logistics Inc.",
-    address: "1234 Street",
-    phone: "123-456-7890",
-    email: "info@logisticsinc.com",
-    contactPerson: "John Doe",
-    contactPhone: "321-654-0987",
-    contactEmail: "john.doe@logisticsinc.com",
-    webSite: "www.logisticsinc.com",
-    logo: "logo-url",
-    cif: "A12345678",
-    socialReason: "Logistics Services",
-    description: "Comprehensive logistics services.",
-    postalCode: "08021",
-    city: "Barcelona",
-    province: "Barcelona",
-    country: "Spain",
-  },
-  // Add more rows as needed
-];
+// // Dummy data for example
+// const rows = [
+//   {
+//     id: 1,
+//     name: "Logistics Inc.",
+//     address: "1234 Street",
+//     phone: "123-456-7890",
+//     email: "info@logisticsinc.com",
+//     contactPerson: "John Doe",
+//     contactPhone: "321-654-0987",
+//     contactEmail: "john.doe@logisticsinc.com",
+//     webSite: "www.logisticsinc.com",
+//     logo: "logo-url",
+//     cif: "A12345678",
+//     socialReason: "Logistics Services",
+//     description: "Comprehensive logistics services.",
+//     postalCode: "08021",
+//     city: "Barcelona",
+//     province: "Barcelona",
+//     country: "Spain",
+//   },
+//   // Add more rows as needed
+// ];
 
 const Companies = () => {
+  useEffect(() => {}, []);
+
   return (
     <>
       <Box
@@ -127,15 +130,7 @@ const Companies = () => {
           width: "100%",
           marginTop: "20px",
         }}
-      >
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          checkboxSelection
-        />
-      </Paper>
+      ></Paper>
     </>
   );
 };

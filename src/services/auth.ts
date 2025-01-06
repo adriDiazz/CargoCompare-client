@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { LoginFormData } from "../pages/Login/LoginForm";
 import { useUserStore } from "../stores/UserStore";
 import { UserDTO } from "../interfaces/types";
+import { Roles } from "../interfaces/roles";
 
 export interface LoginResponse {
     accessToken: string;
@@ -61,7 +62,7 @@ export const login = async ({ email, password }: LoginFormData): Promise<UserDTO
 
         return claims.user;
     } else {
-      return "ADMIN"
+      return Roles.ADMIN;
     }
 
     

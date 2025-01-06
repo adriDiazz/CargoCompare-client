@@ -29,8 +29,10 @@ const LoginForm = () => {
 
     try {
       const user = await login(data);
+      console.log(user);
 
       if (typeof user === "string") {
+        console.log(user);
         if (user === Roles.ADMIN) {
           navigate("/admin-verification", { state: { email: data.email } });
         }
