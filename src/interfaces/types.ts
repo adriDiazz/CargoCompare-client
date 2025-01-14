@@ -213,3 +213,16 @@ export interface GrantedAuthority {
 
 
 export type Role = 'USER' | 'ADMIN' | 'MANAGER';
+
+
+export interface CompanieForTable {
+  Id: number;
+  Logo: string;
+  Nombre: string;
+  CodigoPostal: string;
+  Ciudad: string;
+  Provincia: string;
+
+}
+
+

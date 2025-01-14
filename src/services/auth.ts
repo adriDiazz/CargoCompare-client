@@ -147,7 +147,6 @@ export const validateSession = async (): Promise<void> => {
 
     if (response.ok) {
       const data = await response.json() as UserDTO;
-      console.log("Sesión válida", data);
       setUser({
         user: data,
       }); 

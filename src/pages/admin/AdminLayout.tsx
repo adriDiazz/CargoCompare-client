@@ -1,27 +1,38 @@
-import * as React from "react";
 import { extendTheme, styled } from "@mui/material/styles";
-import { AppProvider, Navigation } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
-import { PageContainer } from "@toolpad/core/PageContainer";
 import { Apartment, LocalShipping } from "@mui/icons-material";
-import { Typography } from "@mui/material";
-import Companies from "./Companies";
-import Providers from "./Providers";
 
-const NAVIGATION: Navigation = [
+import { Outlet } from "react-router";
+import { AppProvider } from "@toolpad/core/AppProvider";
+import { NavigationItem } from "../ui/NavigationItem";
+import { Box } from "@mui/material";
+
+const NAVIGATION = [
   {
     kind: "header",
     title: "Contenidos",
   },
   {
     segment: "companies",
-    title: "Companies",
-    icon: <Apartment />,
+    title: "",
+    icon: (
+      <NavigationItem
+        icon={<Apartment />}
+        title="Companies"
+        to="/admin/companies"
+      />
+    ),
   },
   {
     segment: "providers",
-    title: "Providers",
-    icon: <LocalShipping />,
+    title: "",
+    icon: (
+      <NavigationItem
+        icon={<LocalShipping />}
+        title="Providers"
+        to="/admin/providers"
+      />
+    ),
   },
   {
     kind: "divider",
@@ -69,65 +80,52 @@ const demoTheme = extendTheme({
       xl: 1536,
     },
   },
+  components: {
+    MuiDrawer: {
+      // Asumiendo que el menú lateral utiliza MuiDrawer
+      styleOverrides: {
+        paper: {
+          width: "550px", // Ajusta este valor según necesites
+        },
+      },
+    },
+    MuiContainer: {
+      // Asumiendo que el contenido principal usa MuiContainer
+      styleOverrides: {
+        root: {
+          marginLeft: "30px", // Asegúrate de que coincide con el ancho del Drawer
+        },
+      },
+    },
+  },
 });
 
-function useDemoRouter(initialPath: string) {
-  const [pathname, setPathname] = React.useState(initialPath);
-
-  const router = React.useMemo(() => {
-    return {
-      pathname,
-      searchParams: new URLSearchParams(),
-      navigate: (path: string | URL) => setPathname(String(path)),
-      getComponent: () => {
-        switch (pathname) {
-          case "/companies":
-            return <Companies />;
-          case "/providers":
-            return <Providers />;
-
-          default:
-            return (
-              <Typography variant="h6">
-                Select a category from the menu
-              </Typography>
-            );
-        }
-      },
-    };
-  }, [pathname]);
-
-  return router;
-}
-
-const Skeleton = styled("div")<{ height: number }>(({ theme, height }) => ({
-  backgroundColor: theme.palette.action.hover,
-  borderRadius: theme.shape.borderRadius,
-  height,
-  content: '" "',
-}));
-
 export default function DashboardLayoutBasic(props: any) {
-  const { window } = props;
-
-  const router = useDemoRouter("/admin");
-
-  // Remove this const when copying and pasting into your project.
-  const demoWindow = window ? window() : undefined;
-
   return (
     <AppProvider
       navigation={NAVIGATION}
-      router={router}
       theme={demoTheme}
-      window={demoWindow}
       branding={{
         logo: <></>,
         title: "CargoCompare",
       }}
     >
-      <DashboardLayout>
-        <PageContainer>{router.getComponent()}</PageContainer>
+      <DashboardLayout
+        sx={{
+          backgroundColor: "#F8F9FD",
+        }}
+      >
+        {/* <PageContainer>{router.getComponent()}</PageContainer> */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+            padding: "20px",
+          }}
+        >
+          <Outlet />
+        </Box>
       </DashboardLayout>
     </AppProvider>
   );

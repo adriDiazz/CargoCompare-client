@@ -1,5 +1,4 @@
 import { Link, useLocation, useNavigate } from "react-router";
-import { useUserStore } from "../../stores/UserStore";
 import { Box, Button, InputAdornment, TextField } from "@mui/material";
 import {
   AdminVerificationFormData,
@@ -13,7 +12,6 @@ import { verifyAdminCode } from "../../services/auth";
 import { Roles } from "../../interfaces/roles";
 
 const AdminVerificationPage = () => {
-  const auth = useUserStore();
   const navigate = useNavigate();
   const {
     register,

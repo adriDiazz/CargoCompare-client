@@ -29,7 +29,6 @@ const LoginForm = () => {
 
     try {
       const user = await login(data);
-      console.log(user);
 
       if (typeof user === "string") {
         console.log(user);
