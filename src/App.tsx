@@ -1,6 +1,4 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Box } from "@mui/material";
@@ -9,9 +7,7 @@ import { lightTheme, darkTheme } from "./theme";
 import NavBar from "./pages/ui/NavBar";
 import LandingPage from "./pages/landing/LandingPage";
 import Login from "./pages/Login/Login";
-import HomePage from "./pages/home/HomePage";
 import { useAuthValidation } from "./hooks/useAuthValidation";
-import AdminPage from "./pages/admin/AdminPage";
 import AdminVerificationPage from "./pages/admin/AdminVerificationPage";
 import AdminLayout from "./pages/admin/AdminLayout";
 import Companies from "./pages/admin/companies/Companies";
@@ -19,8 +15,9 @@ import Providers from "./pages/admin/providers/Providers";
 import ProtectedRoute from "./pages/Login/ProtectedRoute";
 import { useUserStore } from "./stores/UserStore";
 import CompanyDetail from "./pages/admin/companies/CompanyDetail";
-import DashboardLayoutBasic from "./pages/admin/AdminLayout";
-import { AppProvider, DashboardLayout } from "@toolpad/core";
+import AdminProtectedRoute from "./pages/Login/AdminProtectedRoute";
+import ManagerLayout from "./pages/companyManager/ManagerLayout";
+import ManagerProtectedRoute from "./pages/Login/ManagerProtectedRoute";
 
 function App() {
   const auth = useUserStore();
@@ -49,12 +46,27 @@ function App() {
           }}
         >
           <NavBar />
+
           <Routes>
             {/* Protected routes */}
-            <Route element={<ProtectedRoute user={auth.user} />}>
-              <Route path="/home" element={<HomePage />} />
+            <Route element={<AdminProtectedRoute user={auth.user} />}>
               <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<AdminPage />} />
+                <Route path="companies" element={<Companies />} />
+                <Route path="providers" element={<Providers />} />
+                <Route path="companies/:id" element={<CompanyDetail />} />
+              </Route>
+            </Route>
+
+            <Route element={<ManagerProtectedRoute user={auth.user} />}>
+              <Route path="/manager" element={<ManagerLayout />}>
+                <Route path="companies" element={<Companies />} />
+                <Route path="providers" element={<Providers />} />
+                <Route path="companies/:id" element={<CompanyDetail />} />
+              </Route>
+            </Route>
+
+            <Route element={<ProtectedRoute user={auth.user} />}>
+              <Route path="/home" element={<AdminLayout />}>
                 <Route path="companies" element={<Companies />} />
                 <Route path="providers" element={<Providers />} />
                 <Route path="companies/:id" element={<CompanyDetail />} />

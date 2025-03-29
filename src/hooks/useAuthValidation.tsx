@@ -9,11 +9,11 @@ export const useAuthValidation = () => {
     const validate = async () => {
       setLoading(true);
       try {
-        await validateSession(); // Valida la sesión con la función ya existente
+        await validateSession();
       } catch {
         clearUser();
       } finally {
-        setLoading(false); // Asegura que se desactive el estado de carga independientemente del resultado
+        setLoading(false);
       }
     };
 

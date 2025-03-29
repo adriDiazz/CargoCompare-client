@@ -6,6 +6,8 @@ import ModalComponent from "../../ui/ModalComponent";
 import CreateCompanyModal from "./CreateCompanyModal";
 import { useCompaniesListStore } from "../../../stores/admin/CompaniesStore";
 import { getAllCompanies } from "../../../services/companiesService";
+import AdminLayout from "../AdminLayout";
+
 import GeneralTable, { Column } from "../../ui/GeneralTable";
 import {
   companiesKeys,
@@ -75,7 +77,6 @@ const Companies = () => {
       <ModalComponent show={openModal} onClose={() => setOpenModal(false)}>
         <CreateCompanyModal onClose={() => setOpenModal(false)} />
       </ModalComponent>
-
       <Box
         sx={{
           display: "flex",

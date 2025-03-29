@@ -38,14 +38,12 @@ const LoginForm = () => {
       } else {
         const userRoles = user.authorities.map((role) => role.authority);
 
-        // if (!userRoles.includes("USER")) {
-        //   throw new Error("No tienes permisos para acceder a esta aplicación.");
-        // }
-
         if (userRoles.includes(Roles.ADMIN)) {
           navigate("/admin");
-        } else if (userRoles.includes("USER")) {
+        } else if (userRoles.includes(Roles.USER)) {
           navigate("/home");
+        } else if (userRoles.includes(Roles.MANAGER)) {
+          navigate("/manager");
         }
       }
     } catch (error) {
