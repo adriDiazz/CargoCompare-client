@@ -6,7 +6,7 @@ export interface User {
     user: UserDTO;
 }
 
-interface UserState {
+export interface UserState {
     user: User | null;
     isLoading: boolean;
     setLoading: (isLoading: boolean) => void;

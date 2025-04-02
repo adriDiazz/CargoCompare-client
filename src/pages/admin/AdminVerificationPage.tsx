@@ -1,15 +1,18 @@
 import { Link, useLocation, useNavigate } from "react-router";
-import { Box, Button, InputAdornment, TextField } from "@mui/material";
+
 import {
   AdminVerificationFormData,
   adminVerificationSchema,
 } from "./validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import Lock from "@mui/icons-material/Lock";
 import { useState } from "react";
 import { verifyAdminCode } from "../../services/auth";
 import { Roles } from "../../interfaces/roles";
+import { Box } from "@radix-ui/themes";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { LockIcon } from "lucide-react";
 
 const AdminVerificationPage = () => {
   const navigate = useNavigate();
@@ -51,7 +54,7 @@ const AdminVerificationPage = () => {
   return (
     <>
       <Box
-        sx={{
+        style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -60,7 +63,7 @@ const AdminVerificationPage = () => {
         }}
       >
         <Box
-          sx={{
+          style={{
             display: "flex",
             flexDirection: "column",
             gap: "50px",
@@ -73,49 +76,35 @@ const AdminVerificationPage = () => {
             <h2 style={{ fontSize: "2rem", fontWeight: "bold" }}>
               Bienvenido a CargoCompare!
             </h2>
-            <Box sx={{ fontSize: "1rem" }}>
+            <Box style={{ fontSize: "1rem" }}>
               Introduce el codigo de verification enviado al email
             </Box>
           </Box>
           <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
             <Box
-              sx={{
+              style={{
                 display: "flex",
                 flexDirection: "column",
                 gap: "20px",
               }}
             >
               {/* Campo de Contraseña */}
-              <TextField
+              <Input
                 {...register("verificationCode")}
-                type="text"
-                error={!!errors.verificationCode}
-                helperText={errors.verificationCode?.message}
-                variant="standard"
                 placeholder="Código de verificación"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Lock sx={{ color: "grey.600" }} />
-                    </InputAdornment>
-                  ),
-                  disableUnderline: true,
-                }}
-                sx={{
-                  backgroundColor: "white",
-                  borderRadius: "8px",
-                  border: "1px solid #E0E0E0",
-                  padding: "4px 8px",
-                  "& .MuiInputBase-input": {
-                    padding: "8px 0",
-                  },
-                }}
+                icon={<LockIcon className="w-4 h-4 text-gray-500" />}
+                className={errors.verificationCode ? "border-red-500" : ""}
               />
+              {errors.verificationCode && (
+                <span className="text-sm text-red-500 -mt-2">
+                  {errors.verificationCode.message}
+                </span>
+              )}
 
               {/* Error message */}
               {error && (
                 <Box
-                  sx={{
+                  style={{
                     color: "error.main",
                     fontSize: "0.8rem",
                     textAlign: "center",
@@ -126,7 +115,7 @@ const AdminVerificationPage = () => {
               )}
               {/* Botón de Olvidé mi Contraseña */}
               <Box
-                sx={{
+                style={{
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
@@ -134,8 +123,8 @@ const AdminVerificationPage = () => {
                 }}
               >
                 <Button
-                  sx={{
-                    color: "primary.main",
+                  style={{
+                    backgroundColor: "#075D99",
                     fontSize: "0.8rem",
                     width: "100%",
                   }}
@@ -147,9 +136,8 @@ const AdminVerificationPage = () => {
               {/* Botón de Enviar */}
               <Button
                 type="submit"
-                variant="contained"
-                sx={{
-                  backgroundColor: "primary.main",
+                style={{
+                  backgroundColor: "#075D99",
                   color: "white",
                   borderRadius: "8px",
                   padding: "10px 20px",

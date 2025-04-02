@@ -5,6 +5,33 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+
+  .spinner::before,
+  .spinner::after {
+    content: '';
+    @apply w-full h-full block absolute rounded-full border-[5.6px] border-[#456bf9];
+    box-shadow: 0 -33.6px 0 -5.6px #456bf9;
+    animation: spinner-entry 0.5s backwards, spinner-rotate 1.25s 0.5s infinite ease;
+  }
+
+  .spinner::after {
+    animation-delay: 0s, 1.25s;
+  }
+
+  @keyframes spinner-entry {
+    from {
+      box-shadow: 0 0 0 -5.6px #456bf9;
+    }
+  }
+
+  @keyframes spinner-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
 body {
   margin: 0;
   font-family: 'Plus Jakarta Sans', sans-serif;

@@ -1,5 +1,5 @@
-import { Grid, Paper, TextField } from "@mui/material";
 import { LogisticCompany, Supplier } from "../../../interfaces/types";
+import { Info } from "../../../components/info";
 
 interface DetailsCardProps {
   company: LogisticCompany | Supplier;
@@ -7,43 +7,35 @@ interface DetailsCardProps {
 
 const DetailsCard: React.FC<DetailsCardProps> = ({ company }) => {
   return (
-    <Paper elevation={3} sx={{ padding: 3 }}>
-      {/* <Typography variant="h5" component="h4" sx={{ mb: 3 }}>
-          {company.name}
-        </Typography> */}
+    //
+    <div className="p-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+        {/* Logo */}
+        <div className="col-span-full flex justify-start">
+          <img
+            src={company?.logo}
+            alt={company?.name}
+            className="w-48 h-48 object-contain rounded-md shadow"
+          />
+        </div>
 
-      <img
-        src={company.logo}
-        alt={company.name}
-        style={{ width: "20%", height: "auto", marginBottom: "1rem" }}
-      />
-
-      <Grid container spacing={2}>
-        {Object.entries(company).map(
-          ([key, value]) =>
-            key !== "id" && (
-              <Grid item xs={12} sm={6} md={4} key={key}>
-                <TextField
-                  size="small"
-                  fullWidth
-                  label={
-                    key.charAt(0).toUpperCase() +
-                    key
-                      .slice(1)
-                      .replace(/([A-Z])/g, " $1")
-                      .trim()
-                  }
-                  value={value || ""}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  variant="standard"
-                />
-              </Grid>
-            )
-        )}
-      </Grid>
-    </Paper>
+        <Info label="Nombre" value={company?.name} />
+        <Info label="Razón Social" value={company?.socialReason} />
+        <Info label="CIF" value={company?.cif} />
+        <Info label="Descripción" value={company?.description} />
+        <Info label="Teléfono" value={company?.phone} />
+        <Info label="Email" value={company?.email} />
+        <Info label="Web" value={company?.webSite} />
+        <Info label="Persona de Contacto" value={company?.contactPerson} />
+        <Info label="Teléfono de Contacto" value={company?.contactPhone} />
+        <Info label="Email de Contacto" value={company?.contactEmail} />
+        <Info label="Dirección" value={company?.address} />
+        <Info label="Código Postal" value={company?.postalCode} />
+        <Info label="Ciudad" value={company?.city} />
+        <Info label="Provincia" value={company?.province} />
+        <Info label="País" value={company?.country} />
+      </div>
+    </div>
   );
 };
 

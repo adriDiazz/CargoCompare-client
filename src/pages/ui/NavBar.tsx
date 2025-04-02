@@ -1,108 +1,68 @@
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Drawer,
-  Box,
-  Button,
-  Badge,
-  Avatar,
-  useMediaQuery,
-} from "@mui/material";
 import { Link, useNavigate } from "react-router";
 import { useUserStore } from "../../stores/UserStore";
+// tu componente reutilizable
+import { MenuIcon } from "lucide-react"; // para el icono en móvil
+import { useMediaQuery } from "react-responsive";
+import { Button } from "../../components/ui/button";
 
 const NavBar = () => {
-  const isMobile = useMediaQuery("(max-width:600px)");
-  const navigate = useNavigate();
+  const isMobile = useMediaQuery({ query: "(max-width: 600px)" });
   const auth = useUserStore();
+  const navigate = useNavigate();
+
+  if (auth.user) return null; // solo mostrar si no está logueado
 
   return (
-    <>
-      {!auth.user && (
-        <AppBar
-          position="static"
-          sx={{
-            bgcolor: "background.default",
-            color: "text.primary",
-            borderRadius: "none",
-          }}
-        >
-          <Toolbar>
-            {
-              // Show the menu icon only on mobile devices
-              isMobile && (
-                <IconButton edge="start" aria-label="menu"></IconButton>
-              )
-            }
-
-            {!isMobile && (
-              <Button
-                component={Link}
-                to="/"
-                color="inherit"
-                sx={{
-                  textTransform: "none",
-                  fontSize: "1rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                }}
-              >
-                <img
-                  src="/logo.png"
-                  alt="Logo CargoCompare"
-                  style={{ height: 30 }}
-                />
-                CargoCompare
-              </Button>
-            )}
-
-            <Box
-              sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}
+    <nav className="bg-background border-b shadow-sm">
+      <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4">
+        {/* Logo e ícono de menú */}
+        <div className="flex items-center gap-4">
+          {isMobile ? (
+            <button className="p-2">
+              <MenuIcon className="h-6 w-6" />
+            </button>
+          ) : (
+            <Link
+              to="/"
+              className="flex items-center gap-2 text-lg font-semibold"
             >
-              <Button component={Link} to="/" color="inherit">
-                Dashboard
-              </Button>
-              <Button component={Link} to="/transactions" color="inherit">
-                Transactions
-              </Button>
-              <Button component={Link} to="/analysis" color="inherit">
-                Analisys
-              </Button>
-              <Button component={Link} to="/support" color="inherit">
-                Support
-              </Button>
-              <Button component={Link} to="/settings" color="inherit">
-                Settings
-              </Button>
-            </Box>
+              <img src="/logo.png" alt="Logo" className="h-8" />
+            </Link>
+          )}
+        </div>
 
-            <Box>
-              <Button
-                component={Link}
-                to="/login"
-                sx={{
-                  textTransform: "none",
-                  fontSize: "1rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                  backgroundColor: "primary.main",
-                  color: "white",
-                  borderRadius: "8px",
-                }}
-                onClick={() => {
-                  navigate("/login");
-                }}
-              >
-                Acceder
-              </Button>
-            </Box>
-          </Toolbar>
-        </AppBar>
-      )}
-    </>
+        {/* Links de navegación (centrados) */}
+        {!isMobile && (
+          <div className="flex gap-6 text-sm font-medium">
+            <Link to="/" className="hover:text-primary transition">
+              Dashboard
+            </Link>
+            <Link to="/transactions" className="hover:text-primary transition">
+              Transactions
+            </Link>
+            <Link to="/analysis" className="hover:text-primary transition">
+              Analysis
+            </Link>
+            <Link to="/support" className="hover:text-primary transition">
+              Support
+            </Link>
+            <Link to="/settings" className="hover:text-primary transition">
+              Settings
+            </Link>
+          </div>
+        )}
+
+        {/* Botón de acceso */}
+        <div>
+          <Button
+            onClick={() => navigate("/login")}
+            className="bg-primary text-white rounded-md px-4 py-2 text-sm font-medium"
+          >
+            Acceder
+          </Button>
+        </div>
+      </div>
+    </nav>
   );
 };
 

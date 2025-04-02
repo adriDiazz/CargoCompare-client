@@ -1,22 +1,22 @@
 import React, { ReactNode } from "react";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+
 import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Paper,
-  TablePagination,
-  Avatar,
-} from "@mui/material";
+} from "../../components/ui/table";
+
+import { cn } from "../../lib/utils";
+import { Avatar, AvatarImage } from "../../components/ui/avatar";
 
 export interface Column {
   id: string;
   label: string;
   minWidth: number;
-  align: "right" | "left" | "center";
+  align?: "right" | "left" | "center";
 }
 
 interface GeneralTableProps<T> {
@@ -35,76 +35,96 @@ const GeneralTable = <T,>({
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  const paginatedRows = rows.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return (
-    <Paper style={{ width: "100%", overflow: "auto", height: "100%" }}>
-      <TableContainer>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
+    <div className="">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {columns.map((column) => (
+              <TableHead
+                key={column.id}
+                className={cn(
+                  column.align === "right" && "text-right",
+                  column.align === "center" && "text-center",
+                  `min-w-[${column.minWidth}px]`
+                )}
+              >
+                {column.label}
+              </TableHead>
+            ))}
+            {actions && (
+              <TableHeader className="text-center">Acciones</TableHeader>
+            )}
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {paginatedRows.map((row, rowIndex) => (
+            <TableRow
+              key={rowIndex}
+              className={cn(
+                "cursor-pointer",
+                onRowClick && "hover:bg-muted/60"
+              )}
+              onClick={() => onRowClick?.(row)}
+            >
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
-                  align={column.align || "left"}
-                  style={{ minWidth: column.minWidth }}
+                  className={cn(
+                    column.align === "right" && "text-right",
+                    column.align === "center" && "text-center"
+                  )}
                 >
-                  {column.label}
+                  {column.id === "Logo" ? (
+                    <Avatar>
+                      <AvatarImage
+                        src={row[column.id as keyof T] as string}
+                        width={40}
+                        height={40}
+                      />
+                    </Avatar>
+                  ) : (
+                    (row[column.id as keyof T] as ReactNode)
+                  )}
                 </TableCell>
               ))}
-              {actions && <TableCell align="center">Actions</TableCell>}
+              {actions && (
+                <TableCell className="text-center">{actions(row)}</TableCell>
+              )}
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => (
-                <TableRow
-                  hover
-                  key={index}
-                  onClick={() => onRowClick && onRowClick(row)}
-                  style={{ cursor: onRowClick ? "pointer" : "default" }}
-                >
-                  {columns.map((column) => (
-                    <TableCell key={column.id} align={column.align || "left"}>
-                      {column.id === "Logo" ? (
-                        <Avatar
-                          src={row[column.id as keyof T] as unknown as string} // Cast para asegurar el tipo
-                          alt="Logo"
-                          style={{ width: 50, height: 50 }}
-                        />
-                      ) : (
-                        (row[column.id as keyof T] as ReactNode) // Fix: Add type assertion as ReactNode
-                      )}
-                    </TableCell>
-                  ))}
-                  {actions && (
-                    <TableCell align="center">{actions(row)}</TableCell>
-                  )}
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
+          ))}
+        </TableBody>
+      </Table>
+
+      {/* Paginación simple, puedes mejorarla o hacerla aparte si prefieres */}
+      <div className="flex items-center justify-between p-4 text-sm">
+        <span>
+          Página {page + 1} de {Math.ceil(rows.length / rowsPerPage)}
+        </span>
+        <div className="flex gap-2">
+          <button
+            disabled={page === 0}
+            onClick={() => setPage((prev) => prev - 1)}
+            className="px-2 py-1 border rounded disabled:opacity-50"
+          >
+            Anterior
+          </button>
+          <button
+            disabled={(page + 1) * rowsPerPage >= rows.length}
+            onClick={() => setPage((prev) => prev + 1)}
+            className="px-2 py-1 border rounded disabled:opacity-50"
+          >
+            Siguiente
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

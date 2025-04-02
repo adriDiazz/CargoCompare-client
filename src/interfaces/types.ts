@@ -81,11 +81,12 @@ export interface TariffConditions {
   generalTariffs: GeneralTariffs;
 }
 
-export interface TariffTypes {
-  id: number;
-  name: string;
-  description: string;
-  generalTariffs: GeneralTariffs;
+export enum TariffTypes {
+ TRUCK = "TRUCK",
+  PALLET = "PALLET",
+  KG_SIZE = "KG_SIZE",
+  M3_SIZE = "M3_SIZE",
+  KG_ZONE = "KG_ZONE",
 }
 
 export interface GeneralTariffs {

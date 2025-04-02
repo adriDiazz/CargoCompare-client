@@ -1,18 +1,18 @@
-import { Box } from "@mui/material";
+import { Box } from "@radix-ui/themes";
 import LoginForm from "./LoginForm";
 
 const Login = () => {
   return (
     <Box
-      sx={{
+      style={{
         display: "flex",
         minHeight: "100vh",
       }}
     >
       <Box
-        sx={{
+        style={{
           width: "50%",
-          backgroundColor: "primary.main",
+          backgroundColor: "#075D99",
           position: "relative",
           display: "flex",
           justifyContent: "center",
@@ -20,7 +20,7 @@ const Login = () => {
         }}
       >
         <Box
-          sx={{
+          style={{
             color: "white",
             fontSize: "1.5rem",
             fontWeight: "bold",
@@ -28,12 +28,12 @@ const Login = () => {
           }}
         >
           <h2 style={{ fontSize: "3rem", fontWeight: "bold" }}>CargoCompare</h2>
-          <Box sx={{ fontSize: "1rem" }}>
+          <Box style={{ fontSize: "1rem" }}>
             Compara tarifas en segundos y comparte todo un entorno de trabajo{" "}
           </Box>
         </Box>
         <Box
-          sx={{
+          style={{
             position: "absolute",
             top: "80%",
             left: "20%",
@@ -46,7 +46,7 @@ const Login = () => {
         </Box>
       </Box>
       <Box
-        sx={{
+        style={{
           width: "50%",
           display: "flex",
           justifyContent: "center",

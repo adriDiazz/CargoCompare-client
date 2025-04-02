@@ -16,6 +16,15 @@ import { cn } from "../lib/utils";
 const sidebarItems = [
   { title: "Inicio", href: "/home", icon: HomeIcon },
   { title: "Proveedores", href: "/proveedores", icon: UsersIcon },
+  { title: "Empresas", href: "/", icon: UsersIcon },
+  { title: "Estadísticas", href: "/estadisticas", icon: BarChart3Icon },
+  { title: "Configuración", href: "/configuracion", icon: SettingsIcon },
+];
+
+const adminSidebarItems = [
+  { title: "Inicio", href: "/admin", icon: HomeIcon },
+  { title: "Proveedores", href: "/admin/providers", icon: UsersIcon },
+  { title: "Empresas", href: "/admin/companies", icon: UsersIcon },
   { title: "Estadísticas", href: "/estadisticas", icon: BarChart3Icon },
   { title: "Configuración", href: "/configuracion", icon: SettingsIcon },
 ];
@@ -24,6 +33,10 @@ export function SidebarNav() {
   const location = useLocation();
   const pathname = location.pathname;
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const currentItems = pathname.startsWith("/admin")
+    ? adminSidebarItems
+    : sidebarItems;
 
   return (
     <>
@@ -78,7 +91,7 @@ export function SidebarNav() {
           {/* Content */}
           <div className="flex-1 overflow-y-auto py-4 px-3">
             <ul className="space-y-2">
-              {sidebarItems.map((item) => (
+              {currentItems.map((item) => (
                 <li key={item.href}>
                   <Link
                     to={item.href}

@@ -26,3 +26,24 @@ export const createProvider = async (provider: CreateProviderFormData, companyId
         throw error;
     }
 };
+
+
+export const getProviderById = async (id: string | undefined): Promise<Supplier> => {
+    
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/suppliers/${id}`, {
+                method: "GET",
+                credentials: "include",
+            });
+    
+            if (!response.ok) {
+                throw new Error("Error al obtener la empresa");
+            }
+    
+            const data = await response.json() as Supplier;
+    
+            return data;
+        } catch (error) {
+            throw error;
+        }
+}

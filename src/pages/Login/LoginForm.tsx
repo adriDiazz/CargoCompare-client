@@ -1,6 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EmailOutlined, Lock } from "@mui/icons-material";
-import { Box, Button, InputAdornment, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router"; // Asegúrate de usar 'react-router-dom'
 import { loginSchema } from "./validations";
@@ -8,6 +6,10 @@ import { z } from "zod";
 import { login } from "../../services/auth";
 import { useState } from "react";
 import { Roles } from "../../interfaces/roles";
+import { Box } from "@radix-ui/themes";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Lock, SendIcon } from "lucide-react";
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -59,7 +61,7 @@ const LoginForm = () => {
     <>
       {error && (
         <Box
-          sx={{
+          style={{
             backgroundColor: "error.main",
             color: "white",
             padding: "10px",
@@ -72,7 +74,7 @@ const LoginForm = () => {
       )}
       {loading && (
         <Box
-          sx={{
+          style={{
             position: "absolute",
             top: 0,
             left: 0,
@@ -85,7 +87,7 @@ const LoginForm = () => {
           }}
         >
           <Box
-            sx={{
+            style={{
               backgroundColor: "white",
               padding: "20px",
               borderRadius: "8px",
@@ -97,7 +99,7 @@ const LoginForm = () => {
       )}
       <Box></Box>
       <Box
-        sx={{
+        style={{
           display: "flex",
           flexDirection: "column",
           gap: "50px",
@@ -110,72 +112,47 @@ const LoginForm = () => {
           <h2 style={{ fontSize: "2rem", fontWeight: "bold" }}>
             Bienvenido a CargoCompare!
           </h2>
-          <Box sx={{ fontSize: "1rem" }}>Inicia sesión para continuar</Box>
+          <Box style={{ fontSize: "1rem" }}>Inicia sesión para continuar</Box>
         </Box>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
           <Box
-            sx={{
+            style={{
               display: "flex",
               flexDirection: "column",
               gap: "20px",
             }}
           >
             {/* Campo de Email */}
-            <TextField
+            <Input
               {...register("email")}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-              variant="standard"
               placeholder="Email"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <EmailOutlined sx={{ color: "grey.600" }} />
-                  </InputAdornment>
-                ),
-                disableUnderline: true,
-              }}
-              sx={{
-                backgroundColor: "white",
-                borderRadius: "8px",
-                border: "1px solid #E0E0E0",
-                padding: "4px 8px",
-                "& .MuiInputBase-input": {
-                  padding: "8px 0",
-                },
-              }}
+              icon={<SendIcon className="w-4 h-4 text-gray-500" />}
+              className={errors.email ? "border-red-500" : ""}
             />
 
+            {errors.email && (
+              <span className="text-sm text-red-500 -mt-2">
+                {errors.email.message}
+              </span>
+            )}
+
             {/* Campo de Contraseña */}
-            <TextField
+            <Input
               {...register("password")}
-              type="password"
-              error={!!errors.password}
-              helperText={errors.password?.message}
-              variant="standard"
               placeholder="Contraseña"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock sx={{ color: "grey.600" }} />
-                  </InputAdornment>
-                ),
-                disableUnderline: true,
-              }}
-              sx={{
-                backgroundColor: "white",
-                borderRadius: "8px",
-                border: "1px solid #E0E0E0",
-                padding: "4px 8px",
-                "& .MuiInputBase-input": {
-                  padding: "8px 0",
-                },
-              }}
+              icon={<Lock className="w-4 h-4 text-gray-500" />}
+              className={errors.password ? "border-red-500" : ""}
             />
+
+            {errors.email && (
+              <span className="text-sm text-red-500 -mt-2">
+                {errors.password?.message}
+              </span>
+            )}
 
             {/* Botón de Olvidé mi Contraseña */}
             <Box
-              sx={{
+              style={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
@@ -183,10 +160,9 @@ const LoginForm = () => {
               }}
             >
               <Button
-                component={Link}
-                to="/forgot-password"
-                sx={{
-                  color: "primary.main",
+                variant={"link"}
+                style={{
+                  color: "#075D99",
                   fontSize: "0.8rem",
                   width: "100%",
                 }}
@@ -198,9 +174,8 @@ const LoginForm = () => {
             {/* Botón de Enviar */}
             <Button
               type="submit"
-              variant="contained"
-              sx={{
-                backgroundColor: "primary.main",
+              style={{
+                backgroundColor: "#075D99",
                 color: "white",
                 borderRadius: "8px",
                 padding: "10px 20px",

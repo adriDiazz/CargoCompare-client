@@ -1,12 +1,8 @@
-import { Search } from "@mui/icons-material";
-import { Box, Button, InputAdornment, Paper, TextField } from "@mui/material";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useEffect, useState } from "react";
 import ModalComponent from "../../ui/ModalComponent";
-import CreateCompanyModal from "./CreateCompanyModal";
+
 import { useCompaniesListStore } from "../../../stores/admin/CompaniesStore";
 import { getAllCompanies } from "../../../services/companiesService";
-import AdminLayout from "../AdminLayout";
 
 import GeneralTable, { Column } from "../../ui/GeneralTable";
 import {
@@ -16,19 +12,22 @@ import {
 } from "../../../utils/tables";
 import { CompanieForTable } from "../../../interfaces/types";
 import { useNavigate } from "react-router";
+import { Box, Flex } from "@radix-ui/themes";
+import { Input } from "../../../components/ui/input";
+import { SearchIcon, TrashIcon } from "lucide-react";
+import { Button } from "../../../components/ui/button";
+import Loader from "../../../components/ui/loader";
 
 const actions = (row: any) => (
   <>
     <Button
-      variant="text"
+      type="button"
       color="error"
-      startIcon={<DeleteOutlineOutlinedIcon sx={{ color: "red" }} />}
-      sx={{
-        color: "white",
-        fontSize: "0.8rem",
-      }}
+      variant={"ghost"}
       onClick={() => console.log("Eliminar empresa")}
-    ></Button>
+    >
+      <TrashIcon color="red" />
+    </Button>
   </>
 );
 
@@ -75,80 +74,34 @@ const Companies = () => {
   return (
     <>
       <ModalComponent show={openModal} onClose={() => setOpenModal(false)}>
-        <CreateCompanyModal onClose={() => setOpenModal(false)} />
+        {/* <CreateCompanyModal onClose={() => setOpenModal(false)} /> */}
+        <p>Modal</p>
       </ModalComponent>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          alignItems: "flex-start",
-          gap: "20px",
-        }}
-      >
-        <TextField
-          // {...register("verificationCode")}
-          type="text"
-          // error={!!errors.verificationCode}
-          // helperText={errors.verificationCode?.message}
-          variant="standard"
-          placeholder="Buscar empresa"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search sx={{ color: "grey.600" }} />
-              </InputAdornment>
-            ),
-            disableUnderline: true,
-          }}
-          sx={{
-            width: "70%",
-            backgroundColor: "white",
-            borderRadius: "8px",
-            border: "1px solid #E0E0E0",
-            padding: "4px 8px",
-            "& .MuiInputBase-input": {
-              padding: "8px 0",
-            },
-          }}
-        />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "20px",
-          }}
-        >
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{
-              color: "white",
-              fontSize: "0.8rem",
-            }}
-            onClick={() => setOpenModal(true)}
-          >
-            Añadir Nueva
-          </Button>
-        </Box>
-      </Box>
-      <Paper
-        sx={{
-          width: "100%",
-          marginTop: "20px",
-        }}
-      >
-        {/* tabla de empresas */}
 
-        {isLoading && <p>Cargando...</p>}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Flex direction={"column"} gap={"20px"} className="p-10">
+          <Input type="text" placeholder="Buscar" icon={<SearchIcon />} />
+          <Box>
+            {" "}
+            <Button
+              color="primary"
+              className="bg-transparent w-32 border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white"
+              onClick={() => setOpenModal(true)}
+            >
+              Agregar
+            </Button>
+          </Box>
 
-        <GeneralTable
-          columns={tableCols}
-          rows={tableRows}
-          onRowClick={handleRowClick}
-          actions={actions}
-        />
-      </Paper>
+          <GeneralTable
+            columns={tableCols}
+            rows={tableRows}
+            onRowClick={handleRowClick}
+            actions={actions}
+          />
+        </Flex>
+      )}
     </>
   );
 };

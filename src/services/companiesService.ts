@@ -67,3 +67,24 @@ export const getCompnanyById = async (id: string | undefined): Promise<LogisticC
         throw error;
     }
 };
+
+
+export const getProviderDetailsForCompany = async (companyId: string | undefined, providerId: string | undefined) => {
+    try {
+
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/suppliers/company/${companyId}/supplier/${providerId}`, {
+            method: "GET",
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            throw new Error("Error al obtener el provedor");
+        }
+
+        const data = await response.json();
+
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
