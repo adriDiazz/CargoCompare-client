@@ -10,6 +10,7 @@ import { Box } from "@radix-ui/themes";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Lock, SendIcon } from "lucide-react";
+import Loader from "../../components/ui/loader";
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -72,31 +73,7 @@ const LoginForm = () => {
           {error}
         </Box>
       )}
-      {loading && (
-        <Box
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Box
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "8px",
-            }}
-          >
-            Cargando...
-          </Box>
-        </Box>
-      )}
+      {loading && <Loader />}
       <Box></Box>
       <Box
         style={{
@@ -139,6 +116,7 @@ const LoginForm = () => {
             {/* Campo de Contraseña */}
             <Input
               {...register("password")}
+              type="password"
               placeholder="Contraseña"
               icon={<Lock className="w-4 h-4 text-gray-500" />}
               className={errors.password ? "border-red-500" : ""}

@@ -56,7 +56,7 @@ const NavBar = () => {
         <div>
           <Button
             onClick={() => navigate("/login")}
-            className="bg-primary text-white rounded-md px-4 py-2 text-sm font-medium"
+            className="bg-[#075D99] text-white rounded-md px-4 py-2 text-sm font-medium"
           >
             Acceder
           </Button>

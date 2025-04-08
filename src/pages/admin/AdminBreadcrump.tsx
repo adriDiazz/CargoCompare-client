@@ -26,7 +26,7 @@ const AdminBreadcrump = () => {
   });
 
   return (
-    <div className="container flex items-center justify-start gap-3 md: ml-[255px]">
+    <div className="container flex items-center justify-start gap-3 ">
       <Breadcrumb className="pt-10">
         <BreadcrumbList>
           {breadcrumbs.map((crumb, i) => (

@@ -7,7 +7,7 @@ import {
 } from "../../../components/ui/tabs";
 import { useParams } from "react-router";
 import { getProviderDetailsForCompany } from "../../../services/companiesService";
-import { Info } from "../../../components/info";
+
 import {
   Table,
   TableBody,
@@ -18,6 +18,7 @@ import {
 } from "../../../components/ui/table";
 import { GeneralTariffs } from "../../../interfaces/types";
 import DetailsCard from "./DetailsCard";
+import TariffTab from "./TariffTab";
 
 const CompanyProviderDetail = () => {
   const { companyId, providerId } = useParams();
@@ -64,32 +65,7 @@ const CompanyProviderDetail = () => {
           </TabsContent>
 
           <TabsContent value="tariff">
-            <div className="mt-4">
-              {provider?.generalTariffs?.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Tipo</TableHead>
-                      <TableHead>Parámetro</TableHead>
-                      <TableHead>Precio (€)</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {provider.generalTariffs.map((tariff: GeneralTariffs) => (
-                      <TableRow key={tariff.id}>
-                        <TableCell>{tariff.tariffType}</TableCell>
-                        <TableCell>{tariff.parameter}</TableCell>
-                        <TableCell>{tariff.price}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  No hay tarifas disponibles.
-                </p>
-              )}
-            </div>
+            <TariffTab generalTariffs={provider?.generalTariffs} />
           </TabsContent>
         </Tabs>
       </div>

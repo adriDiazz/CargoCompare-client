@@ -62,6 +62,8 @@ export const getCompnanyById = async (id: string | undefined): Promise<LogisticC
 
         const data = await response.json() as LogisticCompany;
 
+        console.log(data);
+
         return data;
     } catch (error) {
         throw error;

@@ -36,7 +36,7 @@ const AppContent = ({ auth }: { auth: UserState }) => {
     >
       <NavBar />
       {showPageHeader && <PageHeader />}
-      {isAdminRoute && <AdminBreadcrump />}
+      {/* {isAdminRoute && <AdminBreadcrump />} */}
       <Routes>
         {/* Protected routes */}
         <Route element={<AdminProtectedRoute user={auth.user} />}>

@@ -81,26 +81,27 @@ const Companies = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <Flex direction={"column"} gap={"20px"} className="p-10">
-          <Input type="text" placeholder="Buscar" icon={<SearchIcon />} />
-          <Box>
-            {" "}
-            <Button
-              color="primary"
-              className="bg-transparent w-32 border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white"
-              onClick={() => setOpenModal(true)}
-            >
-              Agregar
-            </Button>
-          </Box>
-
-          <GeneralTable
-            columns={tableCols}
-            rows={tableRows}
-            onRowClick={handleRowClick}
-            actions={actions}
-          />
-        </Flex>
+        <div className="container mx-auto px-4 py-10">
+          <div className="bg-white rounded-lg border shadow-sm">
+            <div className="p-4 border-b">
+              <div className="relative">
+                <SearchIcon
+                  className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
+                  color="#9ca3af"
+                />
+                <Input placeholder="Buscar empresas..." className="pl-10" />
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <GeneralTable
+                columns={tableCols}
+                rows={tableRows}
+                onRowClick={handleRowClick}
+                actions={actions}
+              />
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
