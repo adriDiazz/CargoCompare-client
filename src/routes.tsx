@@ -16,7 +16,7 @@ import ManagerLayout from "./pages/companyManager/ManagerLayout";
 import ManagerProtectedRoute from "./pages/Login/ManagerProtectedRoute";
 import CompanyProviderDetail from "./pages/admin/companies/CompanyProviderDetail";
 import { PageHeader } from "./common/components/page-header";
-import AdminBreadcrump from "./pages/admin/AdminBreadcrump";
+
 import { Box } from "@radix-ui/themes";
 import ProviderDetail from "./pages/admin/providers/ProviderDetail";
 import Users from "./pages/admin/users/Users";
@@ -24,10 +24,9 @@ import Users from "./pages/admin/users/Users";
 const AppContent = ({ auth }: { auth: UserState }) => {
   const location = useLocation();
   const hiddenHeaderRoutes = ["/", "/login", "/admin-verification"];
-  const ADMIN_ROUTE = "/admin";
+
   const showPageHeader = !hiddenHeaderRoutes.includes(location.pathname);
-  const isAdminRoute =
-    location.pathname.includes(ADMIN_ROUTE) && showPageHeader;
+
   return (
     <Box
       style={{

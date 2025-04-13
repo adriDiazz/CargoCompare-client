@@ -9,7 +9,7 @@ import Loader from "../../../common/components/ui/loader";
 import useCompanies from "../hooks/useCompanies";
 import CreateCompanyModal from "./CreateCompanyModal";
 
-const actions = (row: any) => (
+const actions = () => (
   <>
     <Button
       type="button"

@@ -1,12 +1,6 @@
 import type { ReactNode } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { MessageCircleIcon, WalletCards } from "lucide-react";
-
-interface PageHeaderProps {
-  title: string;
-  description?: string;
-  actions?: ReactNode;
-}
+import { WalletCards } from "lucide-react";
 
 export function PageHeader() {
   return (

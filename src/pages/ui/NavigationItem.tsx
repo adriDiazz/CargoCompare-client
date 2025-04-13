@@ -22,18 +22,17 @@ export const NavigationItem: React.FC<NavigationItemProps> = ({
   };
 
   useEffect(() => {
-    const xpath = '//*[@id="root"]/div/div/div[2]/div/nav/ul/li[1]/a/div[1]';
-    const element = document.evaluate(
-      xpath,
-      document,
-      null,
-      XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null
-    ).singleNodeValue;
-
-    if (element) {
-      element.style.width = "100%";
-    }
+    // const xpath = '//*[@id="root"]/div/div/div[2]/div/nav/ul/li[1]/a/div[1]';
+    // const element = document.evaluate(
+    //   xpath,
+    //   document,
+    //   null,
+    //   XPathResult.FIRST_ORDERED_NODE_TYPE,
+    //   null
+    // ).singleNodeValue;
+    // if (element) {
+    //   element.style.width = "100%";
+    // }
   }, []);
 
   return (

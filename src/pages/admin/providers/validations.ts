@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { companiesKeys } from '../../../utils/tables';
+
 
 export const createProviderSchema = z.object({
   name: z.string().min(1, { message: "El nombre de la empresa es requerido" }),

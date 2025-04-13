@@ -28,14 +28,14 @@ const CreateProviderModal: React.FC<CreateProviderModalProps> = ({
     mode: "onChange",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, _] = useState<string | null>(null);
 
   const notifications = useNotifications();
 
   const onSubmit = async (data: CreateProviderFormData) => {
     setLoading(true);
     try {
-      const newProvider = await createProvider(data, data.companyId);
+      await createProvider(data, data.companyId);
       notifications.show("Proveedor creado con éxito", {
         severity: "success",
         autoHideDuration: 3000,

@@ -20,11 +20,11 @@ function App() {
   );
 
   // Toggle theme function
-  const toggleTheme = () => {
-    const newTheme = !isDarkMode;
-    setIsDarkMode(newTheme);
-    localStorage.setItem("theme", newTheme ? "dark" : "light");
-  };
+  // const toggleTheme = () => {
+  //   const newTheme = !isDarkMode;
+  //   setIsDarkMode(newTheme);
+  //   localStorage.setItem("theme", newTheme ? "dark" : "light");
+  // };
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>

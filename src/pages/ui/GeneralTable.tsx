@@ -33,7 +33,7 @@ const GeneralTable = <T,>({
   actions,
 }: GeneralTableProps<T>) => {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, _] = React.useState(10);
 
   const paginatedRows = rows.slice(
     page * rowsPerPage,

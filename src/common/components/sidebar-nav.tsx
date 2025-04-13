@@ -24,7 +24,7 @@ const sidebarItems = [
 const adminSidebarItems = [
   { title: "Inicio", href: "/admin", icon: HomeIcon },
   { title: "Usuarios", href: "/admin/users", icon: UsersIcon },
-  { title: "Proveedores", href: "/admin/providers", icon: UsersIcon },
+  { title: "Proveedores", href: "/admin/providers", icon: TruckIcon },
   { title: "Empresas", href: "/admin/companies", icon: UsersIcon },
   { title: "Estadísticas", href: "/estadisticas", icon: BarChart3Icon },
   { title: "Configuración", href: "/configuracion", icon: SettingsIcon },

@@ -11,10 +11,6 @@ const Users = () => {
   const [error, setError] = useState<string | null>(null);
   const [users, setUsers] = useState<UserFullData[]>([]);
 
-  const handleRowClick = (row: any) => {
-    console.log(row);
-  };
-
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
@@ -25,6 +21,9 @@ const Users = () => {
         setError("Error fetching users");
       } finally {
         setLoading(false);
+        if (openModal && loading && error && users) {
+          console.log("hola");
+        }
       }
     };
 

@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 import {
   AdminVerificationFormData,
@@ -29,6 +29,8 @@ const AdminVerificationPage = () => {
 
   const [codeDigits, setCodeDigits] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+
+  if (loading) console.log("hola");
 
   const handleChange = (value: string, index: number) => {
     if (!/^\d?$/.test(value)) return;
