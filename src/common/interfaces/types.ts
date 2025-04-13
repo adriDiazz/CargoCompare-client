@@ -213,7 +213,7 @@ export interface UserFullData {
   verificationCode: string;
   mfaEnabled: boolean;
   secret: string;
-  role: Role;
+  role: GrantedAuthority[];
   logisticCompany?: LogisticCompany;
   supplier?: Supplier;
 }
@@ -245,6 +245,15 @@ export interface CompanieForTable {
   Ciudad: string;
   Provincia: string;
 
+}
+
+
+export interface UserForTable {
+  Id: string;
+  Nombre: string;
+  Email: string;
+  Rol: GrantedAuthority[]
+  Empresa: string;  
 }
 
 

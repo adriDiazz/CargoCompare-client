@@ -8,8 +8,9 @@ import GeneralTable from "../../ui/GeneralTable";
 import useProviders from "../hooks/useProviders";
 import { CompanieForTable } from "../../../common/interfaces/types";
 import { useNavigate } from "react-router";
-import Loader from "../../../common/components/ui/loader";
+
 import CreateProviderModal from "./CreateProviderModal";
+import SkeletonTable from "../../../common/components/SkeltonTable";
 
 const Providers = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -27,7 +28,9 @@ const Providers = () => {
         onClose={() => setOpenModal(false)}
       />
       {isLoading ? (
-        <Loader />
+        <div className="p-10">
+          <SkeletonTable columns={tableCols} />
+        </div>
       ) : (
         <div className=" mx-auto px-10 py-10">
           <div className="bg-white rounded-lg border shadow-sm">

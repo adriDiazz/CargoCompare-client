@@ -1,4 +1,4 @@
-import { CompanieForTable, LogisticCompany } from "../common/interfaces/types";
+import { CompanieForTable, LogisticCompany, UserForTable, UserFullData } from "../common/interfaces/types";
 import { Column } from "../pages/ui/GeneralTable";
 
 export const companiesKeys = [
@@ -9,6 +9,14 @@ export const companiesKeys = [
     "Ciudad",
     "Provincia",
 ];
+
+export const userKeys = [
+    "Id",
+    "Nombre",
+    "Email",
+    "Rol",
+    "Empresa"
+]
 
 
 export const getTablesColumns = (keys: string[]): Column[] => {
@@ -37,6 +45,18 @@ export const getTablesCompaniesRows = (companies: LogisticCompany[]): CompanieFo
     });
 }
 
-// export const getTablesUsersColumns = (users: UserFullData[]): Column[] => {
+export const getTablesUserRows = (users: UserFullData[]): UserForTable[] => {
 
-// }   
+    return users.map(
+        (user) => {
+            return {
+                Id: user.id,
+                Nombre: user.name,
+                Email: user.email,
+                Rol: user.role,
+                Empresa: user.logisticCompany?.name || "",
+            }
+        }
+    )
+}
+

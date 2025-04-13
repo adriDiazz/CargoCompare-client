@@ -5,9 +5,10 @@ import { useNavigate } from "react-router";
 import { Input } from "../../../common/components/ui/input";
 import { SearchIcon, TrashIcon } from "lucide-react";
 import { Button } from "../../../common/components/ui/button";
-import Loader from "../../../common/components/ui/loader";
+
 import useCompanies from "../hooks/useCompanies";
 import CreateCompanyModal from "./CreateCompanyModal";
+import SkeletonTable from "../../../common/components/SkeltonTable";
 
 const actions = () => (
   <>
@@ -40,7 +41,9 @@ const Companies = () => {
       />
 
       {isLoading ? (
-        <Loader />
+        <div className="p-10">
+          <SkeletonTable columns={tableCols} />
+        </div>
       ) : (
         <div className=" mx-auto px-10 py-10">
           <div className="bg-white rounded-lg border shadow-sm">

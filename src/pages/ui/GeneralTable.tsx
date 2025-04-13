@@ -11,6 +11,7 @@ import {
 
 import { cn } from "../../lib/utils";
 import { Avatar, AvatarImage } from "../../common/components/ui/avatar";
+import { Text } from "@radix-ui/themes";
 
 export interface Column {
   id: string;
@@ -81,6 +82,11 @@ const GeneralTable = <T,>({
                     column.align === "center" && "text-center"
                   )}
                 >
+                  {column.id === "Rol" && (
+                    <Text className="text-sm font-normal">
+                      {row[column.id]?.map((rol: string) => rol).join(", ")}
+                    </Text>
+                  )}
                   {column.id === "Logo" ? (
                     <Avatar>
                       <AvatarImage
