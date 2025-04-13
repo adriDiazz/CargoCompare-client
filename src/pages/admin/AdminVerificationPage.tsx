@@ -6,13 +6,10 @@ import {
 } from "./validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { verifyAdminCode } from "../../services/auth";
-import { Roles } from "../../interfaces/roles";
-import { Box } from "@radix-ui/themes";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { LockIcon } from "lucide-react";
+import { Roles } from "../../common/interfaces/roles";
+import { Box, Text } from "@radix-ui/themes";
 
 const AdminVerificationPage = () => {
   const navigate = useNavigate();
@@ -20,6 +17,7 @@ const AdminVerificationPage = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<AdminVerificationFormData>({
     resolver: zodResolver(adminVerificationSchema),
   });
@@ -28,6 +26,40 @@ const AdminVerificationPage = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const [codeDigits, setCodeDigits] = useState(["", "", "", "", "", ""]);
+  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+
+  const handleChange = (value: string, index: number) => {
+    if (!/^\d?$/.test(value)) return;
+
+    const newDigits = [...codeDigits];
+    newDigits[index] = value;
+    setCodeDigits(newDigits);
+
+    if (value && index < inputRefs.current.length - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    if (e.key === "Backspace" && !codeDigits[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  // Actualiza el valor del input oculto y envía si está completo
+  useEffect(() => {
+    const code = codeDigits.join("");
+    setValue("verificationCode", code);
+
+    if (code.length === 6 && codeDigits.every((d) => d !== "")) {
+      handleSubmit(onSubmit)();
+    }
+  }, [codeDigits]);
 
   const onSubmit = async (data: AdminVerificationFormData) => {
     setError(null);
@@ -44,6 +76,7 @@ const AdminVerificationPage = () => {
       }
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
         setError(error.message);
       }
     } finally {
@@ -81,71 +114,44 @@ const AdminVerificationPage = () => {
             </Box>
           </Box>
           <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+            {error && (
+              <Text
+                style={{
+                  color: "red",
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  marginBottom: "20px",
+                }}
+              >
+                {error}
+              </Text>
+            )}
             <Box
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-              }}
+              style={{ display: "flex", gap: "10px", justifyContent: "center" }}
             >
-              {/* Campo de Contraseña */}
-              <Input
-                {...register("verificationCode")}
-                placeholder="Código de verificación"
-                icon={<LockIcon className="w-4 h-4 text-gray-500" />}
-                className={errors.verificationCode ? "border-red-500" : ""}
-              />
-              {errors.verificationCode && (
-                <span className="text-sm text-red-500 -mt-2">
-                  {errors.verificationCode.message}
-                </span>
-              )}
-
-              {/* Error message */}
-              {error && (
-                <Box
+              {codeDigits.map((digit, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleChange(e.target.value, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  ref={(el) => (inputRefs.current[index] = el)}
                   style={{
-                    color: "error.main",
-                    fontSize: "0.8rem",
+                    width: "40px",
+                    height: "40px",
+                    fontSize: "1.5rem",
                     textAlign: "center",
+                    border: errors.verificationCode
+                      ? "1px solid red"
+                      : "1px solid #ccc",
+                    borderRadius: "8px",
                   }}
-                >
-                  {error}
-                </Box>
-              )}
-              {/* Botón de Olvidé mi Contraseña */}
-              <Box
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  width: "100%",
-                }}
-              >
-                <Button
-                  style={{
-                    backgroundColor: "#075D99",
-                    fontSize: "0.8rem",
-                    width: "100%",
-                  }}
-                >
-                  Reenviar código
-                </Button>
-              </Box>
-
-              {/* Botón de Enviar */}
-              <Button
-                type="submit"
-                style={{
-                  backgroundColor: "#075D99",
-                  color: "white",
-                  borderRadius: "8px",
-                  padding: "10px 20px",
-                }}
-              >
-                Iniciar Sesión
-              </Button>
+                />
+              ))}
             </Box>
+            <input type="hidden" {...register("verificationCode")} />
           </form>
         </Box>
       </Box>

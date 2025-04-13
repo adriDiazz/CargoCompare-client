@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 
 import { Button } from "./ui/button"; // Ajusta si usas shadcn/ui o similar
-import { cn } from "../lib/utils";
+import { cn } from "../../lib/utils";
 
 const sidebarItems = [
   { title: "Inicio", href: "/home", icon: HomeIcon },
@@ -23,6 +23,7 @@ const sidebarItems = [
 
 const adminSidebarItems = [
   { title: "Inicio", href: "/admin", icon: HomeIcon },
+  { title: "Usuarios", href: "/admin/users", icon: UsersIcon },
   { title: "Proveedores", href: "/admin/providers", icon: UsersIcon },
   { title: "Empresas", href: "/admin/companies", icon: UsersIcon },
   { title: "Estadísticas", href: "/estadisticas", icon: BarChart3Icon },

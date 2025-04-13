@@ -5,12 +5,12 @@ import { loginSchema } from "./validations";
 import { z } from "zod";
 import { login } from "../../services/auth";
 import { useState } from "react";
-import { Roles } from "../../interfaces/roles";
-import { Box } from "@radix-ui/themes";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
+import { Roles } from "../../common/interfaces/roles";
+import { Box, Text } from "@radix-ui/themes";
+import { Button } from "../../common/components/ui/button";
+import { Input } from "../../common/components/ui/input";
 import { Lock, SendIcon } from "lucide-react";
-import Loader from "../../components/ui/loader";
+import Loader from "../../common/components/ui/loader";
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -61,17 +61,16 @@ const LoginForm = () => {
   return (
     <>
       {error && (
-        <Box
+        <Text
           style={{
-            backgroundColor: "error.main",
-            color: "white",
-            padding: "10px",
-            borderRadius: "8px",
+            color: "red",
+            fontSize: "1rem",
+            fontWeight: "bold",
             marginBottom: "20px",
           }}
         >
           {error}
-        </Box>
+        </Text>
       )}
       {loading && <Loader />}
       <Box></Box>

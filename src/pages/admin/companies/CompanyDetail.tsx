@@ -1,63 +1,36 @@
-import { Box, Paper, Typography, TextField, Grid } from "@mui/material";
-import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-import { LogisticCompany } from "../../../interfaces/types";
-import { getCompnanyById } from "../../../services/companiesService";
-import { Details } from "@mui/icons-material";
 import DetailsCard from "./DetailsCard";
-import { Flex, Text } from "@radix-ui/themes";
+import { Box, Flex, Text } from "@radix-ui/themes";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../../components/ui/card";
-import { Avatar, AvatarImage } from "../../../components/ui/avatar";
-
-interface CompanyDetailProps {
-  id: string;
-}
+} from "../../../common/components/ui/card";
+import { Avatar, AvatarImage } from "../../../common/components/ui/avatar";
+import Loader from "../../../common/components/ui/loader";
+import useCompany from "../hooks/useCompany";
 
 const CompanyDetail = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [company, setCompany] = useState<LogisticCompany | null>(null);
   const navigation = useNavigate();
   const { id } = useParams();
+  const { loading, error, company } = useCompany(id || "");
 
   const provedores = company?.companySuppliers || [];
-
-  useEffect(() => {
-    const fetchCompany = async () => {
-      setLoading(true);
-      try {
-        const company = await getCompnanyById(id);
-        setCompany(company);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(true);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCompany();
-  }, [id]);
 
   const handleItemClick = (providerId: number) => {
     navigation(`/admin/companies/${id}/provider/${providerId}`);
   };
 
-  if (loading) return <Typography>Loading...</Typography>;
-  if (error) return <Typography>Error loading company details.</Typography>;
-  if (!company) return <Typography>No company found.</Typography>;
+  if (loading) return <Loader />;
+  if (error) return <Text>Error loading company details.</Text>;
+  if (!company) return <Text>No company found.</Text>;
 
   return (
     <div>
+      {" "}
       <DetailsCard company={company} />
-
       <div className="p-10">
         <Text size={"6"}>Provedores de la empresa</Text>
 

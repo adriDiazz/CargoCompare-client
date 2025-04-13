@@ -1,8 +1,8 @@
 import { jwtDecode } from "jwt-decode";
 import { LoginFormData } from "../pages/Login/LoginForm";
-import { useUserStore } from "../stores/UserStore";
-import { UserDTO } from "../interfaces/types";
-import { Roles } from "../interfaces/roles";
+import { useUserStore } from "../common/stores/UserStore";
+import { UserDTO } from "../common/interfaces/types";
+import { Roles } from "../common/interfaces/roles";
 
 export interface LoginResponse {
     accessToken: string;

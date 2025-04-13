@@ -4,8 +4,8 @@ import "@radix-ui/themes/styles.css";
 import { BrowserRouter } from "react-router";
 import { ThemeProvider } from "@emotion/react";
 import { lightTheme, darkTheme } from "./theme";
-import { useAuthValidation } from "./hooks/useAuthValidation";
-import { useUserStore } from "./stores/UserStore";
+import { useAuthValidation } from "./common/hooks/useAuthValidation";
+import { useUserStore } from "./common/stores/UserStore";
 
 import AppContent from "./routes";
 import { Theme } from "@radix-ui/themes";

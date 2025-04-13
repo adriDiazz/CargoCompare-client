@@ -6,19 +6,85 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../components/ui/table";
-import { GeneralTariffs } from "../../../interfaces/types";
+} from "../../../common/components/ui/table";
+import { GeneralTariffs } from "../../../common/interfaces/types";
 import { CircleCheckBig, CircleXIcon } from "lucide-react";
+import { createTariffByCompanyAndProvider } from "../../../services/tariffService";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../common/components/ui/select";
+import { TariffTypes } from "../../../common/interfaces/TariffTypes";
+import {
+  Toast,
+  ToastDescription,
+  ToastProvider,
+  ToastTitle,
+  ToastViewport,
+} from "../../../common/components/ui/toast";
 
 const TariffTab = ({
   generalTariffs,
+  companyId,
+  providerId,
+  updateProvider,
 }: {
   generalTariffs: GeneralTariffs[] | undefined;
+  companyId: string | undefined;
+  providerId: string | undefined;
+  updateProvider: () => Promise<void>;
 }) => {
   const [isAddingNewRow, setIsAddingNewRow] = useState(false);
+  const [toastOpen, setToastOpen] = useState(false);
+  const [tariffFormData, setTariffFormData] = useState({
+    parameter: "",
+    price: 0,
+    tariffType: TariffTypes.TRUCK,
+  });
 
   const handleAddRow = () => {
     setIsAddingNewRow(!isAddingNewRow);
+    setTariffFormData({
+      parameter: "",
+      price: 0,
+      tariffType: TariffTypes.TRUCK,
+    });
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setTariffFormData((prev) => ({
+      ...prev,
+      [name]: name === "price" ? parseFloat(value) : value,
+    }));
+  };
+
+  const handleSaveRow = async () => {
+    try {
+      if (!companyId || !providerId) throw new Error("IDs no definidos");
+
+      await createTariffByCompanyAndProvider({
+        logisticCompanyId: companyId,
+        supplierId: providerId,
+        tariffType: tariffFormData.tariffType,
+        parameter: tariffFormData.parameter,
+        price: tariffFormData.price,
+      });
+      setToastOpen(true);
+
+      setTimeout(() => {
+        updateProvider();
+      }, 500);
+    } catch (error) {
+      console.error("Error al crear tarifa:", error);
+    }
+
+    setIsAddingNewRow(false);
   };
 
   return (
@@ -52,15 +118,33 @@ const TariffTab = ({
             {isAddingNewRow && (
               <TableRow>
                 <TableCell>
-                  <input
-                    type="text"
-                    placeholder="Tipo"
-                    className="border p-2 rounded w-full"
-                  />
+                  <Select
+                    value={tariffFormData.tariffType}
+                    onValueChange={(value) =>
+                      setTariffFormData((prev) => ({
+                        ...prev,
+                        tariffType: value as TariffTypes,
+                      }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona tipo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(TariffTypes).map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </TableCell>
                 <TableCell>
                   <input
                     type="text"
+                    name="parameter"
+                    value={tariffFormData.parameter}
+                    onChange={handleChange}
                     placeholder="Parámetro"
                     className="border p-2 rounded w-full"
                   />
@@ -68,13 +152,16 @@ const TariffTab = ({
                 <TableCell>
                   <input
                     type="number"
+                    name="price"
+                    value={tariffFormData.price}
+                    onChange={handleChange}
                     placeholder="Precio (€)"
                     className="border p-2 rounded w-full"
                   />
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-center gap-2">
-                    <button>
+                    <button onClick={handleSaveRow}>
                       <CircleCheckBig className="text-green-600" />
                     </button>
                     <button onClick={handleAddRow}>
@@ -91,6 +178,15 @@ const TariffTab = ({
           No hay tarifas disponibles.
         </p>
       )}
+      <ToastProvider>
+        <Toast open={toastOpen} onOpenChange={setToastOpen}>
+          <div className="grid gap-1">
+            <ToastTitle>Éxito</ToastTitle>
+            <ToastDescription>Tarifa guardada correctamente.</ToastDescription>
+          </div>
+        </Toast>
+        <ToastViewport />
+      </ToastProvider>
     </div>
   );
 };

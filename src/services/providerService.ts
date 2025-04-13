@@ -1,7 +1,7 @@
-import { Supplier } from "../interfaces/types";
+import { Supplier } from "../common/interfaces/types";
 import { CreateProviderFormData } from "../pages/admin/providers/validations";
 
-export const createProvider = async (provider: CreateProviderFormData, companyId: number) => {
+export const createProvider = async (provider: CreateProviderFormData, companyId: string) => {
 
     try {
         const response = await fetch(`${import.meta.env.VITE_BASE_URL}/companies/company/${companyId}`, {
@@ -46,4 +46,23 @@ export const getProviderById = async (id: string | undefined): Promise<Supplier>
         } catch (error) {
             throw error;
         }
+}
+
+export const getAllProviders = async (): Promise<Supplier[]> => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/suppliers/`, {
+            method: "GET",
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            throw new Error("Error al obtener las empresas");
+        }
+
+        const data = await response.json() as Supplier[];
+
+        return data;
+    } catch (error) {
+        throw error;
+    }
 }

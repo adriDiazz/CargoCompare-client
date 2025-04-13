@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router";
-import { useUserStore } from "../../stores/UserStore";
+import { useUserStore } from "../../common/stores/UserStore";
 // tu componente reutilizable
 import { MenuIcon } from "lucide-react"; // para el icono en móvil
 import { useMediaQuery } from "react-responsive";
-import { Button } from "../../components/ui/button";
+import { Button } from "../../common/components/ui/button";
 
 const NavBar = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 600px)" });

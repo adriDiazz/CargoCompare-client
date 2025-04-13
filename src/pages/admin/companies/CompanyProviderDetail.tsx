@@ -1,73 +1,54 @@
-import { useEffect, useState } from "react";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../../../components/ui/tabs";
-import { useParams } from "react-router";
-import { getProviderDetailsForCompany } from "../../../services/companiesService";
+} from "../../../common/components/ui/tabs";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../../components/ui/table";
-import { GeneralTariffs } from "../../../interfaces/types";
 import DetailsCard from "./DetailsCard";
 import TariffTab from "./TariffTab";
+import useProviderDetails from "../hooks/useProviderDetails";
+import { useTabStore } from "../../../common/stores/admin/TariffTabsStore";
+import Loader from "../../../common/components/ui/loader";
 
 const CompanyProviderDetail = () => {
-  const { companyId, providerId } = useParams();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [provider, setProvider] = useState<any>(null);
+  const { loading, error, provider, companyId, providerId, updateProvider } =
+    useProviderDetails();
 
-  useEffect(() => {
-    const fetchCompanyProvider = async () => {
-      setLoading(true);
-      try {
-        const company = await getProviderDetailsForCompany(
-          companyId,
-          providerId
-        );
-        setProvider(company);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(true);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCompanyProvider();
-  }, []);
-
-  if (loading) return <p>Loading...</p>;
+  const { activeTab, setActiveTab } = useTabStore();
 
   if (error) return <p>Error loading company details.</p>;
 
   return (
     <>
       <div className="p-10">
-        <Tabs defaultValue="data" className="w-full">
-          <TabsList>
-            <TabsTrigger value="data">Datos Basicos</TabsTrigger>
-            <TabsTrigger value="tariff">Tarifas</TabsTrigger>
-          </TabsList>
+        {loading ? (
+          <Loader />
+        ) : (
+          <Tabs
+            value={activeTab}
+            onValueChange={(value) => setActiveTab(value)}
+            className="w-full"
+          >
+            <TabsList>
+              <TabsTrigger value="data">Datos Basicos</TabsTrigger>
+              <TabsTrigger value="tariff">Tarifas</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="data">
-            <DetailsCard company={provider} />
-          </TabsContent>
+            <TabsContent value="data">
+              <DetailsCard company={provider} />
+            </TabsContent>
 
-          <TabsContent value="tariff">
-            <TariffTab generalTariffs={provider?.generalTariffs} />
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="tariff">
+              <TariffTab
+                generalTariffs={provider?.generalTariffs}
+                companyId={companyId}
+                providerId={providerId}
+                updateProvider={updateProvider}
+              />
+            </TabsContent>
+          </Tabs>
+        )}
       </div>
     </>
   );

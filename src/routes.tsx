@@ -9,15 +9,17 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import Companies from "./pages/admin/companies/Companies";
 import Providers from "./pages/admin/providers/Providers";
 import ProtectedRoute from "./pages/Login/ProtectedRoute";
-import { UserState } from "./stores/UserStore";
+import { UserState } from "./common/stores/UserStore";
 import CompanyDetail from "./pages/admin/companies/CompanyDetail";
 import AdminProtectedRoute from "./pages/Login/AdminProtectedRoute";
 import ManagerLayout from "./pages/companyManager/ManagerLayout";
 import ManagerProtectedRoute from "./pages/Login/ManagerProtectedRoute";
 import CompanyProviderDetail from "./pages/admin/companies/CompanyProviderDetail";
-import { PageHeader } from "./components/page-header";
+import { PageHeader } from "./common/components/page-header";
 import AdminBreadcrump from "./pages/admin/AdminBreadcrump";
 import { Box } from "@radix-ui/themes";
+import ProviderDetail from "./pages/admin/providers/ProviderDetail";
+import Users from "./pages/admin/users/Users";
 
 const AppContent = ({ auth }: { auth: UserState }) => {
   const location = useLocation();
@@ -43,6 +45,9 @@ const AppContent = ({ auth }: { auth: UserState }) => {
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="companies" element={<Companies />} />
             <Route path="providers" element={<Providers />} />
+            <Route path="users" element={<Users />} />
+
+            <Route path="providers/:id" element={<ProviderDetail />} />
             <Route path="companies/:id" element={<CompanyDetail />} />
             <Route
               path="companies/:companyId/provider/:providerId"

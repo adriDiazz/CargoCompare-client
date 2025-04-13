@@ -1,4 +1,4 @@
-import { LogisticCompany } from "../interfaces/types";
+import { LogisticCompany } from "../common/interfaces/types";
 import { CreateCompanyFormData } from "../pages/admin/companies/validations";
 
 export const createCompany = async (company: CreateCompanyFormData) => {

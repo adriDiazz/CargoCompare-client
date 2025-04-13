@@ -6,7 +6,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "../../components/ui/breadcrumb";
+} from "../../common/components/ui/breadcrumb";
 import { Link, useLocation } from "react-router";
 import { adminSidebarItems } from "../../common/constants";
 
@@ -26,7 +26,7 @@ const AdminBreadcrump = () => {
   });
 
   return (
-    <div className="container flex items-center justify-start gap-3 ">
+    <div className="pl-10 flex items-center justify-start gap-3 ">
       <Breadcrumb className="pt-10">
         <BreadcrumbList>
           {breadcrumbs.map((crumb, i) => (

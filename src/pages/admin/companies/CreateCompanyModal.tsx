@@ -1,165 +1,151 @@
-// import {
-//   Box,
-//   Grid,
-//   TextField,
-//   Button,
-//   Typography,
-//   IconButton,
-//   CircularProgress,
-// } from "@mui/material";
+import * as Dialog from "@radix-ui/react-dialog";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { X, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { createCompany } from "../../../services/companiesService";
+import { useCompaniesListStore } from "../../../common/stores/admin/CompaniesStore";
+import { CreateCompanyFormData, createCompanySchema } from "./validations";
+import { Button } from "../../../common/components/ui/button";
 
-// import { useForm } from "react-hook-form";
-// import { CreateCompanyFormData, createCompanySchema } from "./validations";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { createCompany } from "../../../services/companiesService";
-// import { useState } from "react";
-// import { useNotifications } from "@toolpad/core";
-// import { useCompaniesListStore } from "../../../stores/admin/CompaniesStore";
+const fields = [
+  { name: "name", label: "Nombre de la empresa", md: 6 },
+  { name: "socialReason", label: "Razón Social", md: 6 },
+  { name: "cif", label: "CIF", md: 6 },
+  { name: "webSite", label: "Sitio web", type: "url", md: 6 },
+  { name: "email", label: "Correo electrónico", type: "email", md: 6 },
+  { name: "phone", label: "Teléfono", type: "tel", md: 6 },
+  { name: "contactPerson", label: "Persona de contacto", md: 6 },
+  { name: "contactPhone", label: "Teléfono de contacto", type: "tel", md: 6 },
+  { name: "contactEmail", label: "Email de contacto", type: "email", md: 6 },
+  { name: "logo", label: "Logo", md: 6 },
+  { name: "address", label: "Dirección", md: 12 },
+  { name: "postalCode", label: "Código Postal", md: 4 },
+  { name: "city", label: "Ciudad", md: 4 },
+  { name: "province", label: "Provincia", md: 4 },
+  { name: "country", label: "País", md: 6 },
+  { name: "description", label: "Descripción", md: 6, type: "textarea" },
+];
 
-// export default function CreateCompanyModal({
-//   onClose,
-// }: {
-//   onClose: () => void;
-// }) {
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors },
-//   } = useForm<CreateCompanyFormData>({
-//     resolver: zodResolver(createCompanySchema),
-//     mode: "onChange",
-//   });
+interface CreateCompanyModalProps {
+  open: boolean;
+  onClose: () => void;
+}
 
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState<string | null>(null);
-//   const notifications = useNotifications();
-//   const { addNewCompany } = useCompaniesListStore();
+export default function CreateCompanyModal({
+  open,
+  onClose,
+}: CreateCompanyModalProps) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-//   const onSubmit = async (data: CreateCompanyFormData) => {
-//     try {
-//       setLoading(true);
-//       const createdCompany = await createCompany(data);
-//       addNewCompany(createdCompany);
-//       setLoading(false);
-//       onClose();
-//       notifications.show("Consider yourself notified!", {
-//         severity: "success",
-//         autoHideDuration: 3000,
-//       });
-//     } catch (error) {
-//       setError("Error al crear la empresa");
-//       notifications.show("Error al crear la empresa", {
-//         severity: "error",
-//         autoHideDuration: 3000,
-//       });
-//       setLoading(false);
-//     }
-//   };
+  const { addNewCompany } = useCompaniesListStore();
 
-//   return (
-//     <Box
-//       sx={{
-//         padding: "20px",
-//         width: "90%", // Aumentar el ancho para adaptarse a más campos
-//         maxWidth: "60%", // Aumentar el ancho máximo
-//         backgroundColor: "white",
-//         borderRadius: "8px",
-//         margin: "auto",
-//       }}
-//     >
-//       <Typography
-//         variant="h4"
-//         sx={{
-//           mb: 2,
-//           display: "flex",
-//           justifyContent: "space-between",
-//           alignItems: "center",
-//         }}
-//       >
-//         Crear Empresa Logística
-//         <IconButton onClick={onClose} aria-label="cerrar">
-//           <GridCloseIcon />
-//         </IconButton>
-//       </Typography>
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreateCompanyFormData>({
+    resolver: zodResolver(createCompanySchema),
+    mode: "onChange",
+  });
 
-//       <form onSubmit={handleSubmit(onSubmit)}>
-//         <Grid container spacing={2}>
-//           {fields.map((field) => (
-//             <Grid item xs={12} md={field.md} key={field.name}>
-//               <TextField
-//                 fullWidth
-//                 label={field.label}
-//                 variant="outlined"
-//                 size="small"
-//                 type={field.type || "text"}
-//                 {...register(field.name as keyof CreateCompanyFormData)} // Cast field.name to keyof CreateCompanyFormData
-//                 error={Boolean(errors[field.name])}
-//                 helperText={errors[field.name]?.message}
-//               />
-//             </Grid>
-//           ))}
-//           <Grid item xs={12}>
-//             <Button
-//               type="submit"
-//               fullWidth
-//               variant="contained"
-//               color="primary"
-//               sx={{
-//                 color: "white",
-//                 fontSize: "0.8rem",
-//                 position: "relative", // Posiciona el CircularProgress correctamente
-//               }}
-//               disabled={loading} // Deshabilita el botón mientras se carga
-//             >
-//               {loading ? (
-//                 <CircularProgress
-//                   size={24} // Tamaño del loader
-//                   sx={{
-//                     color: "white", // Color del loader para que sea visible sobre el botón
-//                     position: "absolute", // Asegura que el loader se posicione correctamente
-//                     top: "50%", // Centra verticalmente
-//                     left: "50%", // Centra horizontalmente
-//                     marginTop: "-12px", // Ajusta la posición vertical debido al tamaño
-//                     marginLeft: "-12px", // Ajusta la posición horizontal debido al tamaño
-//                   }}
-//                 />
-//               ) : (
-//                 "Crear"
-//               )}
-//             </Button>
-//           </Grid>
-//         </Grid>
-//       </form>
-//     </Box>
-//   );
-// }
+  const onSubmit = async (data: CreateCompanyFormData) => {
+    setLoading(true);
+    try {
+      const createdCompany = await createCompany(data);
+      addNewCompany(createdCompany);
+      onClose();
+    } catch (e) {
+      setError("Error al crear la empresa");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-// // Definición de campos para simplificar y evitar repetición
-// const fields = [
-//   { name: "name", label: "Nombre de la empresa", md: 6 },
-//   { name: "socialReason", label: "Razón Social", md: 6 },
-//   { name: "cif", label: "CIF", md: 6 },
-//   { name: "webSite", label: "Sitio web", type: "url", md: 6 },
-//   {
-//     name: "email",
-//     label: "Correo electrónico",
-//     type: "email",
-//     md: 6,
-//   },
-//   { name: "phone", label: "Teléfono", type: "tel", md: 6 },
-//   { name: "contactPerson", label: "Persona de contacto", md: 6 },
-//   {
-//     name: "contactPhone",
-//     label: "Teléfono de contacto",
-//     type: "tel",
-//     md: 6,
-//   },
-//   { name: "contactEmail", label: "Email de contacto", type: "email", md: 6 },
-//   { name: "logo", label: "Logo", md: 6 },
-//   { name: "address", label: "Dirección", md: 12 },
-//   { name: "postalCode", label: "Código Postal", md: 4 },
-//   { name: "city", label: "Ciudad", md: 4 },
-//   { name: "province", label: "Provincia", md: 4 },
-//   { name: "country", label: "País", md: 6 },
-//   { name: "description", label: "Descripción", md: 6, type: "textarea" },
-// ];
+  return (
+    <Dialog.Root open={open} onOpenChange={onClose}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 bg-black/40 data-[state=open]:animate-fadeIn" />
+        <Dialog.Content
+          className="
+            fixed left-[50%] top-[50%]
+            max-h-[90vh] w-[90%] max-w-[60%]
+            -translate-x-1/2 -translate-y-1/2
+            rounded-md bg-white p-4
+            focus:outline-none
+            data-[state=open]:animate-slideIn
+          "
+        >
+          {/* Encabezado con botón de cerrar */}
+          <div className="mb-2 flex items-center justify-between">
+            <Dialog.Title className="text-xl font-bold">
+              Crear Empresa Logística
+            </Dialog.Title>
+            <Dialog.Close asChild>
+              <button
+                onClick={onClose}
+                className="rounded-md p-2 text-gray-500 hover:bg-gray-200"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </Dialog.Close>
+          </div>
+
+          {/* Formulario */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Grid de inputs */}
+            <div className="grid grid-cols-12 gap-4">
+              {fields.map((field) => (
+                <div
+                  key={field.name}
+                  className={`col-span-4 md:col-span-${field.md}`}
+                >
+                  <label className="mb-1 block text-sm font-semibold">
+                    {field.label}
+                  </label>
+
+                  {field.type === "textarea" ? (
+                    <textarea
+                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                      {...register(field.name as keyof CreateCompanyFormData)}
+                    />
+                  ) : (
+                    <input
+                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                      type={field.type || "text"}
+                      {...register(field.name as keyof CreateCompanyFormData)}
+                    />
+                  )}
+
+                  {errors[field.name] && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors[field.name]?.message as string}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {error && <p className="text-sm text-red-600">{error}</p>}
+
+            {/* Botón de submit */}
+            <div className="relative">
+              <Button
+                type="submit"
+                className="flex w-full items-center justify-center rounded  px-4 py-2 font-medium text-white disabled:cursor-not-allowed"
+                disabled={loading}
+              >
+                {loading ? (
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin text-white" />
+                ) : (
+                  "Crear"
+                )}
+              </Button>
+            </div>
+          </form>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+}

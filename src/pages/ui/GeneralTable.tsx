@@ -7,10 +7,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../components/ui/table";
+} from "../../common/components/ui/table";
 
 import { cn } from "../../lib/utils";
-import { Avatar, AvatarImage } from "../../components/ui/avatar";
+import { Avatar, AvatarImage } from "../../common/components/ui/avatar";
 
 export interface Column {
   id: string;

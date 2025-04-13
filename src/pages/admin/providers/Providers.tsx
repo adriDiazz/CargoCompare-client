@@ -1,72 +1,68 @@
-import { Search } from "@mui/icons-material";
-import { Box, Button, InputAdornment, TextField } from "@mui/material";
 import { useState } from "react";
-import ModalComponent from "../../ui/ModalComponent";
+import { Input } from "../../../common/components/ui/input";
+import { SearchIcon } from "lucide-react";
+import { Button } from "../../../common/components/ui/button";
+
+import GeneralTable from "../../ui/GeneralTable";
+
+import useProviders from "../hooks/useProviders";
+import { CompanieForTable } from "../../../common/interfaces/types";
+import { useNavigate } from "react-router";
+import Loader from "../../../common/components/ui/loader";
+import CreateProviderModal from "./CreateProviderModal";
 
 const Providers = () => {
   const [openModal, setOpenModal] = useState(false);
+  const { isLoading, tableCols, tableRows } = useProviders();
+  const navigation = useNavigate();
+
+  const handleRowClick = (row: CompanieForTable) => {
+    navigation(`/admin/providers/${row.Id}`);
+  };
 
   return (
     <>
-      <ModalComponent show={openModal} onClose={() => setOpenModal(false)}>
-        <h2>f</h2>
-      </ModalComponent>
-
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          alignItems: "flex-start",
-          gap: "20px",
-        }}
-      >
-        <TextField
-          // {...register("verificationCode")}
-          type="text"
-          // error={!!errors.verificationCode}
-          // helperText={errors.verificationCode?.message}
-          variant="standard"
-          placeholder="Buscar proveedor"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search sx={{ color: "grey.600" }} />
-              </InputAdornment>
-            ),
-            disableUnderline: true,
-          }}
-          sx={{
-            width: "70%",
-            backgroundColor: "white",
-            borderRadius: "8px",
-            border: "1px solid #E0E0E0",
-            padding: "4px 8px",
-            "& .MuiInputBase-input": {
-              padding: "8px 0",
-            },
-          }}
-        />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "20px",
-          }}
-        >
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{
-              color: "white",
-              fontSize: "0.8rem",
-            }}
-            onClick={() => setOpenModal(true)}
-          >
-            Añadir Nueva
-          </Button>
-        </Box>
-      </Box>
+      <CreateProviderModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className=" mx-auto px-10 py-10">
+          <div className="bg-white rounded-lg border shadow-sm">
+            <div className="p-4 border-b">
+              <div className="flex gap-5">
+                <Input
+                  placeholder="Buscar proveedores..."
+                  className="pl-10"
+                  icon={
+                    <SearchIcon
+                      className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
+                      color="#9ca3af"
+                    />
+                  }
+                />
+                <Button
+                  variant="outline"
+                  className=""
+                  onClick={() => setOpenModal(true)}
+                >
+                  Añadir provedor
+                </Button>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <GeneralTable
+                columns={tableCols}
+                rows={tableRows}
+                onRowClick={handleRowClick}
+                // actions={actions}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

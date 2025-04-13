@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { useUserStore } from "../../stores/UserStore";
+import { useUserStore } from "../../common/stores/UserStore";
 
 const HomePage = () => {
   const { user } = useUserStore();

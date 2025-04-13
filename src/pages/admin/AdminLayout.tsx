@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import { SidebarNav } from "../../components/sidebar-nav";
+import { SidebarNav } from "../../common/components/sidebar-nav";
 import AdminBreadcrump from "./AdminBreadcrump";
 
 export default function DashboardLayoutBasic() {

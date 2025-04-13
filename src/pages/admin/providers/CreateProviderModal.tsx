@@ -1,45 +1,41 @@
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Box,
-  Grid,
-  TextField,
-  Button,
-  Typography,
-  IconButton,
-  CircularProgress,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+
 import { CreateProviderFormData, createProviderSchema } from "./validations";
 
 import { useNotifications } from "@toolpad/core";
 import { createProvider } from "../../../services/providerService";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Loader2, X } from "lucide-react";
+import { Button } from "../../../common/components/ui/button";
 
 interface CreateProviderModalProps {
+  open: boolean;
   onClose: () => void;
-  companyId: number;
 }
 
 const CreateProviderModal: React.FC<CreateProviderModalProps> = ({
+  open,
   onClose,
-  companyId,
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<CreateProviderFormData>({
     resolver: zodResolver(createProviderSchema),
     mode: "onChange",
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const notifications = useNotifications();
 
   const onSubmit = async (data: CreateProviderFormData) => {
     setLoading(true);
     try {
-      const newProvider = await createProvider(data, companyId);
+      const newProvider = await createProvider(data, data.companyId);
       notifications.show("Proveedor creado con éxito", {
         severity: "success",
         autoHideDuration: 3000,
@@ -56,82 +52,94 @@ const CreateProviderModal: React.FC<CreateProviderModalProps> = ({
   };
 
   return (
-    <Box
-      sx={{
-        padding: "20px",
-        width: "90%",
-        maxWidth: "600px",
-        backgroundColor: "white",
-        borderRadius: "8px",
-        margin: "auto",
-      }}
-    >
-      <Typography
-        variant="h4"
-        sx={{
-          mb: 2,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        Crear Proveedor
-        <IconButton onClick={onClose} aria-label="cerrar">
-          <CloseIcon />
-        </IconButton>
-      </Typography>
+    <Dialog.Root open={open} onOpenChange={onClose}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 bg-black/40 data-[state=open]:animate-fadeIn" />
+        <Dialog.Content
+          className="
+            fixed left-[50%] top-[50%]
+            max-h-[90vh] w-[90%] max-w-[60%]
+            -translate-x-1/2 -translate-y-1/2
+            rounded-md bg-white p-4
+            focus:outline-none
+            data-[state=open]:animate-slideIn
+          "
+        >
+          {/* Encabezado con botón de cerrar */}
+          <div className="mb-2 flex items-center justify-between">
+            <Dialog.Title className="text-xl font-bold">
+              Crear Proveedor
+            </Dialog.Title>
+            <Dialog.Close asChild>
+              <button
+                onClick={onClose}
+                className="rounded-md p-2 text-gray-500 hover:bg-gray-200"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </Dialog.Close>
+          </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={2}>
-          {fields.map((field) => (
-            <Grid item xs={12} md={field.md} key={field.name}>
-              <TextField
-                fullWidth
-                label={field.label}
-                variant="outlined"
-                size="small"
-                type={field.type || "text"}
-                {...register(field.name)}
-                error={Boolean(errors[field.name])}
-                helperText={errors[field.name]?.message as ReactNode}
-              />
-            </Grid>
-          ))}
-          <Grid item xs={12}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              disabled={loading}
-              sx={{ position: "relative" }}
-            >
-              {loading ? (
-                <CircularProgress
-                  size={24}
-                  sx={{
-                    color: "white",
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    marginTop: "-12px",
-                    marginLeft: "-12px",
-                  }}
-                />
-              ) : (
-                "Crear"
-              )}
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
-    </Box>
+          {/* Formulario */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Grid de inputs */}
+            <div className="grid grid-cols-12 gap-4">
+              {fields.map((field) => (
+                <div
+                  key={field.name}
+                  className={`col-span-4 md:col-span-${field.md}`}
+                >
+                  <label className="mb-1 block text-sm font-semibold">
+                    {field.label}
+                  </label>
+
+                  {field.type === "textarea" ? (
+                    <textarea
+                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                      {...register(field.name as keyof CreateProviderFormData)}
+                    />
+                  ) : (
+                    <input
+                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                      type={field.type || "text"}
+                      {...register(field.name as keyof CreateProviderFormData)}
+                    />
+                  )}
+
+                  {errors[field.name] && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors[field.name]?.message as string}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {error && <p className="text-sm text-red-600">{error}</p>}
+
+            {/* Botón de submit */}
+            <div className="relative">
+              <Button
+                type="submit"
+                className="flex w-full items-center justify-center rounded  px-4 py-2 font-medium text-white disabled:cursor-not-allowed"
+                disabled={loading}
+              >
+                {loading ? (
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin text-white" />
+                ) : (
+                  "Crear"
+                )}
+              </Button>
+            </div>
+          </form>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };
 
 export default CreateProviderModal;
 
-// Definición de campos para simplificar y evitar repetición
 const fields = [
   { name: "name", label: "Nombre de la empresa", md: 6 },
   { name: "socialReason", label: "Razón Social", md: 6 },
@@ -145,6 +153,7 @@ const fields = [
   },
   { name: "phone", label: "Teléfono", type: "tel", md: 6 },
   { name: "contactPerson", label: "Persona de contacto", md: 6 },
+  { name: "companyId", label: "Id Empresa", md: 6, type: "number" },
   {
     name: "contactPhone",
     label: "Teléfono de contacto",

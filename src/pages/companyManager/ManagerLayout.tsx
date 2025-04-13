@@ -6,7 +6,7 @@ import { Outlet } from "react-router";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { NavigationItem } from "../ui/NavigationItem";
 import { Box } from "@mui/material";
-import { SidebarNav } from "../../components/sidebar-nav";
+import { SidebarNav } from "../../common/components/sidebar-nav";
 
 const NAVIGATION = [
   {

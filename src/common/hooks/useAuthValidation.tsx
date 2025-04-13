@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useUserStore } from "../stores/UserStore";
-import { validateSession } from "../services/auth";
+import { validateSession } from "../../services/auth";
 
 export const useAuthValidation = () => {
   const { setUser, clearUser, setLoading } = useUserStore();

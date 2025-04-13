@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router";
-import { useAuthValidation } from "../../hooks/useAuthValidation";
-import { useUserStore } from "../../stores/UserStore";
+import { useAuthValidation } from "../../common/hooks/useAuthValidation";
+import { useUserStore } from "../../common/stores/UserStore";
 
 interface ProtectedRouteProps {
   user: any; // Cambia al tipo adecuado si tienes uno

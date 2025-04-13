@@ -1,5 +1,5 @@
-import { LogisticCompany, Supplier } from "../../../interfaces/types";
-import { Info } from "../../../components/info";
+import { LogisticCompany, Supplier } from "../../../common/interfaces/types";
+import { Info } from "../../../common/components/info";
 
 interface DetailsCardProps {
   company: LogisticCompany | Supplier;
