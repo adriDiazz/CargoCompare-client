@@ -1,4 +1,4 @@
-import { CompanieForTable, LogisticCompany, UserFullData } from "../common/interfaces/types";
+import { CompanieForTable, LogisticCompany } from "../common/interfaces/types";
 import { Column } from "../pages/ui/GeneralTable";
 
 export const companiesKeys = [

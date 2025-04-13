@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router"; // Asegúrate de usar 'react-router-dom'
+import { useNavigate } from "react-router"; // Asegúrate de usar 'react-router-dom'
 import { loginSchema } from "./validations";
 import { z } from "zod";
 import { login } from "../../services/auth";

@@ -15,9 +15,7 @@ function App() {
   useAuthValidation();
 
   // State to track dark mode
-  const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
+  const [isDarkMode, _] = useState(localStorage.getItem("theme") === "dark");
 
   // Toggle theme function
   // const toggleTheme = () => {

@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { WalletCards } from "lucide-react";
 
