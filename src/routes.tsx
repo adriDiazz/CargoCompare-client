@@ -12,7 +12,7 @@ import ProtectedRoute from "./pages/Login/ProtectedRoute";
 import { UserState } from "./common/stores/UserStore";
 import CompanyDetail from "./pages/admin/companies/CompanyDetail";
 import AdminProtectedRoute from "./pages/Login/AdminProtectedRoute";
-import ManagerLayout from "./pages/companyManager/ManagerLayout";
+
 import ManagerProtectedRoute from "./pages/Login/ManagerProtectedRoute";
 import CompanyProviderDetail from "./pages/admin/companies/CompanyProviderDetail";
 import { PageHeader } from "./common/components/page-header";
@@ -56,7 +56,7 @@ const AppContent = ({ auth }: { auth: UserState }) => {
         </Route>
 
         <Route element={<ManagerProtectedRoute user={auth.user} />}>
-          <Route path="/manager" element={<ManagerLayout />}>
+          <Route path="/manager" element={<AdminLayout />}>
             <Route path="companies" element={<Companies />} />
             <Route path="providers" element={<Providers />} />
             <Route path="companies/:id" element={<CompanyDetail />} />
