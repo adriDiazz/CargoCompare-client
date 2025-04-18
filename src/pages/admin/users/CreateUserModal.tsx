@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { createCompany } from "../../../services/companiesService";
 
 import { Button } from "../../../common/components/ui/button";
 import { useUserListStore } from "../../../common/stores/admin/UsersStore";
@@ -15,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../common/components/ui/select";
+import { UserFullData } from "../../../common/interfaces/types";
 
 export const fields = [
   { name: "name", label: "Nombre", md: 6 },
@@ -52,8 +52,10 @@ export default function CreateUserModal({
     setLoading(true);
     try {
       //   const createdCompany = await createCompany(data);
-      //   setToastOpen(true);
-      //   addNewUser(createdCompany);
+      console.log("data", data);
+      const createdUser = {} as UserFullData;
+      setToastOpen(true);
+      addNewUser(createdUser);
       onClose();
     } catch (e) {
       setError("Error al crear la empresa");
