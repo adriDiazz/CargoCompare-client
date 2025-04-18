@@ -4,20 +4,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { CreateProviderFormData, createProviderSchema } from "./validations";
 
-import { useNotifications } from "@toolpad/core";
 import { createProvider } from "../../../services/providerService";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Loader2, X } from "lucide-react";
 import { Button } from "../../../common/components/ui/button";
+import { useSuppliersListStore } from "../../../common/stores/admin/SuppliersStore";
 
 interface CreateProviderModalProps {
   open: boolean;
   onClose: () => void;
+  setToastOpen: (open: boolean) => void;
 }
 
 const CreateProviderModal: React.FC<CreateProviderModalProps> = ({
   open,
   onClose,
+  setToastOpen,
 }) => {
   const {
     register,
@@ -30,23 +32,16 @@ const CreateProviderModal: React.FC<CreateProviderModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, _] = useState<string | null>(null);
 
-  const notifications = useNotifications();
+  const { addNewSupplier } = useSuppliersListStore();
 
   const onSubmit = async (data: CreateProviderFormData) => {
     setLoading(true);
     try {
-      await createProvider(data, data.companyId);
-      notifications.show("Proveedor creado con éxito", {
-        severity: "success",
-        autoHideDuration: 3000,
-      });
+      const createdSupplier = await createProvider(data, data.companyId);
+      setToastOpen(true);
+      addNewSupplier(createdSupplier);
       onClose();
-      setLoading(false);
     } catch (error) {
-      notifications.show("Error al crear proveedor", {
-        severity: "error",
-        autoHideDuration: 3000,
-      });
       setLoading(false);
     }
   };
@@ -96,11 +91,13 @@ const CreateProviderModal: React.FC<CreateProviderModalProps> = ({
                   {field.type === "textarea" ? (
                     <textarea
                       className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                      placeholder={field.label}
                       {...register(field.name as keyof CreateProviderFormData)}
                     />
                   ) : (
                     <input
                       className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                      placeholder={field.label}
                       type={field.type || "text"}
                       {...register(field.name as keyof CreateProviderFormData)}
                     />
@@ -140,7 +137,7 @@ const CreateProviderModal: React.FC<CreateProviderModalProps> = ({
 
 export default CreateProviderModal;
 
-const fields = [
+export const fields = [
   { name: "name", label: "Nombre de la empresa", md: 6 },
   { name: "socialReason", label: "Razón Social", md: 6 },
   { name: "cif", label: "CIF", md: 6 },

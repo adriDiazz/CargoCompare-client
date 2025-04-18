@@ -48,6 +48,8 @@ const AppContent = ({ auth }: { auth: UserState }) => {
 
             <Route path="providers/:id" element={<ProviderDetail />} />
             <Route path="companies/:id" element={<CompanyDetail />} />
+            <Route path="users/:id" element={<CompanyDetail />} />
+
             <Route
               path="companies/:companyId/provider/:providerId"
               element={<CompanyProviderDetail />}

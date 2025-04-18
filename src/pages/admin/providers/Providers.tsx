@@ -1,20 +1,43 @@
 import { useState } from "react";
-import { Input } from "../../../common/components/ui/input";
-import { SearchIcon } from "lucide-react";
-import { Button } from "../../../common/components/ui/button";
 
-import GeneralTable from "../../ui/GeneralTable";
-
-import useProviders from "../hooks/useProviders";
 import { CompanieForTable } from "../../../common/interfaces/types";
 import { useNavigate } from "react-router";
 
-import CreateProviderModal from "./CreateProviderModal";
-import SkeletonTable from "../../../common/components/SkeltonTable";
+import CreateProviderModal, { fields } from "./CreateProviderModal";
+
+import ProvidersTable from "./ProvidersTable";
+import useEditingRow from "../hooks/useEditingRow";
+import EditingProviderSheet from "./EditingProviderSheet";
+import ConfirmDialog from "../../../common/components/ConfirmDialog";
+import useProviderDeletingRow from "../hooks/useProviderDeletingRow";
+import ToastMessage from "../../../common/components/ToastMessage";
 
 const Providers = () => {
   const [openModal, setOpenModal] = useState(false);
-  const { isLoading, tableCols, tableRows } = useProviders();
+
+  const {
+    deletingRow,
+    deleteLoading,
+    setDeletingRow,
+    deletError,
+    deleteToastOpen,
+    setDeleteToastOpen,
+    handleDeleteClick,
+    handleDelete,
+    errorToastOpen: errorDelete,
+  } = useProviderDeletingRow();
+
+  const {
+    editingRow,
+    isSheetOpen,
+    setIsSheetOpen,
+    handleEditClick,
+    toastOpen,
+    setToastOpen,
+    errorToastOpen: errorEditing,
+    setErrorToastOpen,
+  } = useEditingRow();
+
   const navigation = useNavigate();
 
   const handleRowClick = (row: CompanieForTable) => {
@@ -25,47 +48,56 @@ const Providers = () => {
     <>
       <CreateProviderModal
         open={openModal}
-        onClose={() => setOpenModal(false)}
+        onClose={() => {
+          setOpenModal(false);
+        }}
+        setToastOpen={setToastOpen}
       />
-      {isLoading ? (
-        <div className="p-10">
-          <SkeletonTable columns={tableCols} />
-        </div>
-      ) : (
-        <div className=" mx-auto px-10 py-10">
-          <div className="bg-white rounded-lg border shadow-sm">
-            <div className="p-4 border-b">
-              <div className="flex gap-5">
-                <Input
-                  placeholder="Buscar proveedores..."
-                  className="pl-10"
-                  icon={
-                    <SearchIcon
-                      className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
-                      color="#9ca3af"
-                    />
-                  }
-                />
-                <Button
-                  variant="outline"
-                  className=""
-                  onClick={() => setOpenModal(true)}
-                >
-                  Añadir provedor
-                </Button>
-              </div>
-            </div>
-            <div className="overflow-x-auto">
-              <GeneralTable
-                columns={tableCols}
-                rows={tableRows}
-                onRowClick={handleRowClick}
-                // actions={actions}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+
+      <EditingProviderSheet
+        open={isSheetOpen}
+        row={editingRow}
+        onOpenChange={setIsSheetOpen}
+        fields={fields}
+        setErrorToastOpen={setErrorToastOpen}
+        setToastOpen={setToastOpen}
+      />
+
+      <ConfirmDialog
+        open={!!deletingRow}
+        onOpenChange={() => {
+          setDeletingRow(null);
+        }}
+        title="Eliminar empresa"
+        description="¿Estás seguro de que deseas eliminar esta empresa? Esta acción no se puede deshacer."
+        onConfirm={() => {
+          handleDelete(deletingRow!);
+        }}
+        confirmLabel="Eliminar"
+        cancelLabel="Cancelar"
+        loading={deleteLoading}
+        error={deletError}
+      />
+
+      <ToastMessage setToastOpen={setToastOpen} toastOpen={toastOpen} />
+      <ToastMessage
+        setToastOpen={setDeleteToastOpen}
+        toastOpen={deleteToastOpen}
+        message="Empresa eliminada correctamente"
+      />
+      <ToastMessage
+        setToastOpen={setErrorToastOpen}
+        toastOpen={errorDelete || errorEditing}
+        message={"Error al realizar la acción"}
+        isError
+      />
+
+      <ProvidersTable
+        handleRowClick={handleRowClick}
+        setOpenModal={setOpenModal}
+        handleEditClick={handleEditClick}
+        handleDeleteClick={handleDeleteClick}
+      />
     </>
   );
 };

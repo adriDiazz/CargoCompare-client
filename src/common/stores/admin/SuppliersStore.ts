@@ -7,6 +7,8 @@ interface SuppliersList {
   setLoading: (isLoading: boolean) => void;
   setSuppliers: (suppliers: Supplier[]) => void;
   addNewSupplier: (supplier: Supplier) => void;
+  updateSupplierStore: (company: Supplier) => void;
+  deleteSupplierStore: (companyId: number) => void;
 }
 
 export const useSuppliersListStore = create<SuppliersList>((set) => ({
@@ -19,4 +21,14 @@ export const useSuppliersListStore = create<SuppliersList>((set) => ({
 
   addNewSupplier: (supplier) =>
     set((state) => ({ suppliers: [...state.suppliers, supplier] })),
+  updateSupplierStore: (supplier) => 
+    set((state) => ({
+      suppliers: state.suppliers.map((s: Supplier) =>
+        s.id === supplier.id ? supplier : s
+      ),
+    })),
+  deleteSupplierStore: (supplierId) =>
+    set((state) => ({
+      suppliers: state.suppliers.filter((s: Supplier) => s.id !== supplierId),
+       })),
 }));

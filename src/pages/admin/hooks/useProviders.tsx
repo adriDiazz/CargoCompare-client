@@ -35,6 +35,15 @@ const useProviders = () => {
     getCompanies();
   }, []);
 
+  useEffect(() => {
+    if (suppliers.length > 0) {
+      const tableCols = getTablesCompaniesColumns(companiesKeys);
+      const tableRows = getTablesCompaniesRows(suppliers);
+      setTableCols(tableCols);
+      setTableRows(tableRows);
+    }
+  }, [suppliers]);
+
   return {
     tableCols,
     tableRows,

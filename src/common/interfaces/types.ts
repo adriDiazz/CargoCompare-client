@@ -213,7 +213,8 @@ export interface UserFullData {
   verificationCode: string;
   mfaEnabled: boolean;
   secret: string;
-  role: GrantedAuthority[];
+  state: State;
+  authorities: GrantedAuthority[];
   logisticCompany?: LogisticCompany;
   supplier?: Supplier;
 }
@@ -235,6 +236,12 @@ export interface GrantedAuthority {
 
 
 export type Role = 'USER' | 'ADMIN' | 'MANAGER';
+export enum State {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  PENDING = 'PENDING',
+  SUSPENDED = 'SUSPENDED'
+} 
 
 
 export interface CompanieForTable {
@@ -252,7 +259,8 @@ export interface UserForTable {
   Id: string;
   Nombre: string;
   Email: string;
-  Rol: GrantedAuthority[]
+  Estado: State;
+  Rol: string[]
   Empresa: string;  
 }
 

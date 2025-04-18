@@ -15,7 +15,8 @@ export const userKeys = [
     "Nombre",
     "Email",
     "Rol",
-    "Empresa"
+    "Empresa",
+    "Estado",
 ]
 
 
@@ -51,9 +52,10 @@ export const getTablesUserRows = (users: UserFullData[]): UserForTable[] => {
         (user) => {
             return {
                 Id: user.id,
-                Nombre: user.name,
+                Nombre: user.name + " " + user.lastName,
                 Email: user.email,
-                Rol: user.role,
+                Estado: user.state,
+                Rol: user.authorities.map((role) => role.authority),
                 Empresa: user.logisticCompany?.name || "",
             }
         }

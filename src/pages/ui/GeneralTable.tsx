@@ -11,7 +11,9 @@ import {
 
 import { cn } from "../../lib/utils";
 import { Avatar, AvatarImage } from "../../common/components/ui/avatar";
-import { Text } from "@radix-ui/themes";
+
+import { Badge } from "../../common/components/ui/badge";
+import { State } from "../../common/interfaces/types";
 
 export interface Column {
   id: string;
@@ -58,9 +60,7 @@ const GeneralTable = <T,>({
                 {column.label}
               </TableHead>
             ))}
-            {actions && (
-              <TableHeader className="text-center">Acciones</TableHeader>
-            )}
+            {actions && <TableHeader className="text-center"></TableHeader>}
           </TableRow>
         </TableHeader>
 
@@ -82,12 +82,42 @@ const GeneralTable = <T,>({
                     column.align === "center" && "text-center"
                   )}
                 >
-                  {column.id === "Rol" && (
-                    <Text className="text-sm font-normal">
-                      {row[column.id]?.map((rol: string) => rol).join(", ")}
-                    </Text>
+                  {column.id === "Rol" &&
+                    Array.isArray(row[column.id as keyof T]) &&
+                    (row[column.id as keyof T] as string[]).map(
+                      (rol, index) => (
+                        <Badge
+                          key={index}
+                          className="mr-1 mt-1"
+                          variant="secondary"
+                        >
+                          {rol}
+                        </Badge>
+                      )
+                    )}
+
+                  {column.id === "Estado" && (
+                    <Badge
+                      className={
+                        row[column.id] === State.ACTIVE
+                          ? "bg-green-100 text-green-800 hover:bg-green-100"
+                          : row[column.id] === State.INACTIVE
+                            ? "bg-gray-100 text-gray-800 hover:bg-gray-100"
+                            : row[column.id] === State.PENDING
+                              ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
+                              : "bg-red-100 text-red-800 hover:bg-red-100"
+                      }
+                    >
+                      {row[column.id] === State.ACTIVE
+                        ? "Activo"
+                        : row[column.id] === State.INACTIVE
+                          ? "Inactivo"
+                          : row[column.id] === State.PENDING
+                            ? "Pendiente"
+                            : "Eliminado"}
+                    </Badge>
                   )}
-                  {column.id === "Logo" ? (
+                  {column.id === "Logo" && (
                     <Avatar>
                       <AvatarImage
                         src={row[column.id as keyof T] as string}
@@ -95,9 +125,12 @@ const GeneralTable = <T,>({
                         height={40}
                       />
                     </Avatar>
-                  ) : (
-                    (row[column.id as keyof T] as ReactNode)
                   )}
+
+                  {column.id !== "Logo" &&
+                    column.id !== "Rol" &&
+                    column.id !== "Estado" &&
+                    (row[column.id as keyof T] as ReactNode)}
                 </TableCell>
               ))}
               {actions && (

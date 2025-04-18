@@ -4,27 +4,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { X, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { createCompany } from "../../../services/companiesService";
-import { useCompaniesListStore } from "../../../common/stores/admin/CompaniesStore";
-import { CreateCompanyFormData, createCompanySchema } from "./validations";
+
 import { Button } from "../../../common/components/ui/button";
+import { useUserListStore } from "../../../common/stores/admin/UsersStore";
+import { CreateUserFormData, createUserSchema } from "./validations";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../common/components/ui/select";
 
 export const fields = [
-  { name: "name", label: "Nombre de la empresa", md: 6 },
-  { name: "socialReason", label: "Razón Social", md: 6 },
-  { name: "cif", label: "CIF", md: 6 },
-  { name: "webSite", label: "Sitio web", type: "url", md: 6 },
+  { name: "name", label: "Nombre", md: 6 },
+  { name: "apellido", label: "Apellido", md: 6 },
   { name: "email", label: "Correo electrónico", type: "email", md: 6 },
-  { name: "phone", label: "Teléfono", type: "tel", md: 6 },
-  { name: "contactPerson", label: "Persona de contacto", md: 6 },
-  { name: "contactPhone", label: "Teléfono de contacto", type: "tel", md: 6 },
-  { name: "contactEmail", label: "Email de contacto", type: "email", md: 6 },
-  { name: "logo", label: "Logo", md: 6 },
-  { name: "address", label: "Dirección", md: 12 },
-  { name: "postalCode", label: "Código Postal", md: 4 },
-  { name: "city", label: "Ciudad", md: 4 },
-  { name: "province", label: "Provincia", md: 4 },
-  { name: "country", label: "País", md: 6 },
-  { name: "description", label: "Descripción", md: 6, type: "textarea" },
+  { name: "role", label: "Rol", type: "select", md: 6 },
 ];
 
 interface CreateCompanyModalProps {
@@ -33,7 +29,7 @@ interface CreateCompanyModalProps {
   setToastOpen: (open: boolean) => void;
 }
 
-export default function CreateCompanyModal({
+export default function CreateUserModal({
   open,
   onClose,
   setToastOpen,
@@ -41,23 +37,23 @@ export default function CreateCompanyModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { addNewCompany } = useCompaniesListStore();
+  const { addNewUser } = useUserListStore();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateCompanyFormData>({
-    resolver: zodResolver(createCompanySchema),
+  } = useForm<CreateUserFormData>({
+    resolver: zodResolver(createUserSchema),
     mode: "onChange",
   });
 
-  const onSubmit = async (data: CreateCompanyFormData) => {
+  const onSubmit = async (data: CreateUserFormData) => {
     setLoading(true);
     try {
-      const createdCompany = await createCompany(data);
-      setToastOpen(true);
-      addNewCompany(createdCompany);
+      //   const createdCompany = await createCompany(data);
+      //   setToastOpen(true);
+      //   addNewUser(createdCompany);
       onClose();
     } catch (e) {
       setError("Error al crear la empresa");
@@ -102,24 +98,41 @@ export default function CreateCompanyModal({
               {fields.map((field) => (
                 <div
                   key={field.name}
-                  className={`col-span-4 md:col-span-${field.md}`}
+                  className={`col-span-12 md:col-span-${field.md}`}
                 >
                   <label className="mb-1 block text-sm font-semibold">
                     {field.label}
                   </label>
 
-                  {field.type === "textarea" ? (
+                  {field.type === "select" && (
+                    <Select
+                      {...register(field.name as keyof CreateUserFormData)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ADMIN">ADMIN</SelectItem>
+                        <SelectItem value="MANAGER">MANAGER</SelectItem>
+                        <SelectItem value="USER">USER</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+
+                  {field.type === "textarea" && (
                     <textarea
                       placeholder={field.label}
                       className="w-full rounded-md border border-gray-300 p-2 text-sm"
-                      {...register(field.name as keyof CreateCompanyFormData)}
+                      {...register(field.name as keyof CreateUserFormData)}
                     />
-                  ) : (
+                  )}
+
+                  {field.type !== "textarea" && field.type !== "select" && (
                     <input
                       className="w-full rounded-md border border-gray-300 p-2 text-sm"
                       type={field.type || "text"}
                       placeholder={field.label}
-                      {...register(field.name as keyof CreateCompanyFormData)}
+                      {...register(field.name as keyof CreateUserFormData)}
                     />
                   )}
 

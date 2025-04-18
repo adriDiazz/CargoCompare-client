@@ -10,7 +10,7 @@ export const createProviderSchema = z.object({
   phone: z.string().min(1, { message: "El teléfono es requerido" }),
   contactPerson: z.string().optional(),
   contactPhone: z.string().optional(),
-  companyId: z.string().min(1, { message: "El ID de la empresa es requerido" }),
+  companyId: z.string().min(1, { message: "El ID de la empresa es requerido" }).optional(),
   contactEmail: z.string().email({ message: "Debe ser un correo electrónico válido" }).optional(),
   logo: z.string().optional(),
   address: z.string().min(1, { message: "La dirección es requerida" }),

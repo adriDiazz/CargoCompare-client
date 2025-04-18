@@ -90,3 +90,44 @@ export const getProviderDetailsForCompany = async (companyId: string | undefined
         throw error;
     }
 }
+
+
+export const deleteCompany = async (id: string | undefined) => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/companies/${id}`, {
+            method: "DELETE",
+            credentials: "include",
+        });
+
+        if (response.status !== 204) {
+            throw new Error("Error al eliminar la empresa");
+        }
+
+        return true;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const updateCompany = async (id: string | undefined, company: CreateCompanyFormData) => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/companies/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(company),
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            throw new Error("Error al actualizar la empresa");
+        }
+
+        const data = await response.json() as LogisticCompany;
+
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
